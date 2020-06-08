@@ -25,4 +25,11 @@ sudo echo {"subscriptionId":"$AZURE_SUBSCRIPTION_ID","clientId":"$AZURE_CLIENT_I
 
 sudo mkdir /root/openshift
 
+sudo wget https://raw.githubusercontent.com/Zuldajri/ocp4/master/install-config.yml -O /root/openshift/install-config.yml
+
+sudo -i "s/domian/$DOMAIN_NAME/g" /root/openshift/install-config.yml
+sudo -i "s/clusterwill/$CLUSTER_NAME/g" /root/openshift/install-config.yml
+sudo -i "s/RG-domain/$RG_DOMAIN/g" /root/openshift/install-config.yml
+sudo -i "s/location/$LOCATION/g" /root/openshift/install-config.yml
+sudo -i "s/pullSercet/$PULL_SECRET/g" /root/openshift/install-config.yml
 
