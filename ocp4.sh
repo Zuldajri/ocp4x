@@ -18,9 +18,9 @@ sudo eval "$(ssh-agent -s)"
 sudo ssh-add /home/root/.ssh/openshift
 
 wget https://mirror.openshift.com/pub/openshift-v4/clients/ocp/4.4.7/openshift-client-linux-4.4.7.tar.gz
-tar xvf openshift-client-linux-4.4.6.tar.gz
+tar xvf openshift-client-linux-4.4.7.tar.gz
 wget https://mirror.openshift.com/pub/openshift-v4/clients/ocp/4.4.7/openshift-install-linux-4.4.7.tar.gz
-tar xvf openshift-install-linux-4.4.6.tar.gz
+tar xvf openshift-install-linux-4.4.7.tar.gz
 
 sudo mv oc kubectl openshift-install /usr/local/bin
 
@@ -32,10 +32,10 @@ sudo mkdir /root/openshift
 
 sudo wget https://raw.githubusercontent.com/Zuldajri/ocp4/master/install-config.yml -O /root/openshift/install-config.yml
 
-sudo -i "s/domian/$DOMAIN_NAME/g" /root/openshift/install-config.yml
-sudo -i "s/clusterwill/$CLUSTER_NAME/g" /root/openshift/install-config.yml
-sudo -i "s/RG-domain/$RG_DOMAIN/g" /root/openshift/install-config.yml
-sudo -i "s/location/$LOCATION/g" /root/openshift/install-config.yml
-sudo -i "s/pullSercet/$PULL_SECRET/g" /root/openshift/install-config.yml
+sudo sed -i "s/domian/$DOMAIN_NAME/g" /root/openshift/install-config.yml
+sudo sed -i "s/clusterwill/$CLUSTER_NAME/g" /root/openshift/install-config.yml
+sudo sed -i "s/RG-domain/$RG_DOMAIN/g" /root/openshift/install-config.yml
+sudo sed -i "s/location/$LOCATION/g" /root/openshift/install-config.yml
+sudo sed -i "s/pullSercet/$PULL_SECRET/g" /root/openshift/install-config.yml
 
 sudo openshift-install create cluster --dir=/root/openshift --log-level=info
