@@ -1,19 +1,28 @@
 apiVersion: v1
 baseDomain: domian
-compute:
-- architecture: amd64
-  hyperthreading: Enabled
-  name: worker
-  platform: {}
-  replicas: 3
 controlPlane:
-  architecture: amd64
   hyperthreading: Enabled
   name: master
-  platform: {}
+  platform:
+    azure:
+      osDisk:
+        diskSizeGB: 512
+      type: Standard_D8s_v3
+  replicas: 3
+compute:
+- hyperthreading: Enabled
+  name: worker
+  platform: 
+    azure:
+      type: Standard_D2s_v3
+      osDisk:
+        diskSizeGB: 512 
+      zones: 
+      - "1"
+      - "2"
+      - "3"
   replicas: 3
 metadata:
-  creationTimestamp: null
   name: clusterwill
 networking:
   clusterNetwork:
