@@ -42,4 +42,4 @@ sudo sed -i "s/RG-domain/$RG_DOMAIN/g" /root/openshift/install-config.yml
 sudo sed -i "s/location/$LOCATION/g" /root/openshift/install-config.yml
 sudo sed -i "s/pullSercet/$PULL_SECRET/g" /root/openshift/install-config.yml
 
-sudo openshift-install create cluster --dir=/root/openshift --log-level=info
+openshift-install create cluster --dir=/root/openshift --log-level=info
