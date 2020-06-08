@@ -24,13 +24,13 @@ tar xvf openshift-install-linux-4.4.7.tar.gz
 
 sudo mv oc kubectl openshift-install /usr/local/bin
 
-sudo mkdir /root/.azure
-sudo wget https://raw.githubusercontent.com/Zuldajri/ocp4/master/osServicePrincipal.json -O /root/.azure/osServicePrincipal.json
+sudo mkdir .azure
+sudo wget https://raw.githubusercontent.com/Zuldajri/ocp4/master/osServicePrincipal.json -O /var/lib/waagent/custom-script/download/0/.azure/osServicePrincipal.json
 
-sudo sed -i "s/AZURE_SUBSCRIPTION_ID/$AZURE_SUBSCRIPTION_ID/g" /root/.azure/osServicePrincipal.json
-sudo sed -i "s/AZURE_CLIENT_ID/$AZURE_CLIENT_ID/g" /root/.azure/osServicePrincipal.json
-sudo sed -i "s/AZURE_CLIENT_SECRET/$AZURE_CLIENT_SECRET/g" /root/.azure/osServicePrincipal.json
-sudo sed -i "s/AZURE_TENANT_ID/$AZURE_TENANT_ID/g" /root/.azure/osServicePrincipal.json
+sudo sed -i "s/AZURE_SUBSCRIPTION_ID/$AZURE_SUBSCRIPTION_ID/g" /var/lib/waagent/custom-script/download/0/.azure/osServicePrincipal.json
+sudo sed -i "s/AZURE_CLIENT_ID/$AZURE_CLIENT_ID/g" /var/lib/waagent/custom-script/download/0/.azure/osServicePrincipal.json
+sudo sed -i "s/AZURE_CLIENT_SECRET/$AZURE_CLIENT_SECRET/g" /var/lib/waagent/custom-script/download/0/.azure/osServicePrincipal.json
+sudo sed -i "s/AZURE_TENANT_ID/$AZURE_TENANT_ID/g" /var/lib/waagent/custom-script/download/0/.azure/osServicePrincipal.json
 
 sudo mkdir openshift
 
