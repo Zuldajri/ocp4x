@@ -42,5 +42,4 @@ sudo sed -i "s/RG-domain/$RG_DOMAIN/g" /var/lib/waagent/custom-script/download/0
 sudo sed -i "s/location/$LOCATION/g" /var/lib/waagent/custom-script/download/0/openshift/install-config.yaml
 sudo sed -i "s/pullSercet/$PULL_SECRET/g" /var/lib/waagent/custom-script/download/0/openshift/install-config.yaml
 
-sudo su -
-openshift-install create cluster --dir=openshift --log-level=info
+sudo su -c 'openshift-install create cluster --dir=openshift --log-level=info'
