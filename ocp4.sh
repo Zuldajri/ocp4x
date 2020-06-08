@@ -34,13 +34,13 @@ sudo sed -i "s/AZURE_TENANT_ID/$AZURE_TENANT_ID/g" /root/.azure/osServicePrincip
 
 sudo mkdir openshift
 
-sudo wget https://raw.githubusercontent.com/Zuldajri/ocp4/master/install-config.yml -O /var/lib/waagent/custom-script/download/0/openshift/install-config.yml
+sudo wget https://raw.githubusercontent.com/Zuldajri/ocp4/master/install-config.yaml -O /var/lib/waagent/custom-script/download/0/openshift/install-config.yaml
 
-sudo sed -i "s/domian/$DOMAIN_NAME/g" /var/lib/waagent/custom-script/download/0/openshift/install-config.yml
-sudo sed -i "s/clusterwill/$CLUSTER_NAME/g" /var/lib/waagent/custom-script/download/0/openshift/install-config.yml
-sudo sed -i "s/RG-domain/$RG_DOMAIN/g" /var/lib/waagent/custom-script/download/0/openshift/install-config.yml
-sudo sed -i "s/location/$LOCATION/g" /var/lib/waagent/custom-script/download/0/openshift/install-config.yml
-sudo sed -i "s/pullSercet/$PULL_SECRET/g" /var/lib/waagent/custom-script/download/0/openshift/install-config.yml
+sudo sed -i "s/domian/$DOMAIN_NAME/g" /var/lib/waagent/custom-script/download/0/openshift/install-config.yaml
+sudo sed -i "s/clusterwill/$CLUSTER_NAME/g" /var/lib/waagent/custom-script/download/0/openshift/install-config.yaml
+sudo sed -i "s/RG-domain/$RG_DOMAIN/g" /var/lib/waagent/custom-script/download/0/openshift/install-config.yaml
+sudo sed -i "s/location/$LOCATION/g" /var/lib/waagent/custom-script/download/0/openshift/install-config.yaml
+sudo sed -i "s/pullSercet/$PULL_SECRET/g" /var/lib/waagent/custom-script/download/0/openshift/install-config.yaml
 
 sudo su -
 openshift-install create cluster --dir=openshift --log-level=info
