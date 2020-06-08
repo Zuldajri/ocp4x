@@ -38,3 +38,4 @@ sudo -i "s/RG-domain/$RG_DOMAIN/g" /root/openshift/install-config.yml
 sudo -i "s/location/$LOCATION/g" /root/openshift/install-config.yml
 sudo -i "s/pullSercet/$PULL_SECRET/g" /root/openshift/install-config.yml
 
+openshift-install create cluster --dir=/root/openshift --log-level=info
