@@ -7,6 +7,11 @@ AZURE_CLIENT_ID=$2
 AZURE_TENANT_ID=$3
 AZURE_SUBSCRIPTION_ID=$4
 AZURE_CLIENT_SECRET=$5
+DOMAIN_NAME=$6
+CLUSTER_NAME=$7
+RG_DOMAIN=$8
+LOCATION=$9
+PULL_SECRET=${10}
 
 sudo ssh-keygen -t rsa -b 4096 -N '' -f /home/root/.ssh/openshift
 sudo eval "$(ssh-agent -s)"
