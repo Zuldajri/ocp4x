@@ -39,3 +39,5 @@ platform:
     region: location
 publish: External
 pullSecret: 'pullSercet'
+fips: false
+sshKey: publickey
