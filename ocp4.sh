@@ -23,7 +23,7 @@ ssh-keygen -t rsa -b 4096 -N '' -f /var/lib/waagent/custom-script/download/0/ope
 eval "$(ssh-agent -s)"
 ssh-add /var/lib/waagent/custom-script/download/0/openshiftkey
 
-SSH_PUBLIC=$(sudo cat /var/lib/waagent/custom-script/download/0/openshiftkey.pub)
+SSH_PUBLIC=$(cat /var/lib/waagent/custom-script/download/0/openshiftkey.pub)
 
 wget https://mirror.openshift.com/pub/openshift-v4/clients/ocp/4.4.7/openshift-client-linux-4.4.7.tar.gz
 tar xvf openshift-client-linux-4.4.7.tar.gz
