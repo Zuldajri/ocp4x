@@ -11,7 +11,13 @@ DOMAIN_NAME=$6
 RG_DOMAIN=$7
 CLUSTER_NAME=$8
 LOCATION=$9
-PULL_SECRET=${10}
+CONTROL_PLANE_REPLICA=${10}
+CONTROL_PLANE_VM_SIZE=${11}
+CONTROL_PLANE_OS_DISK=${12}
+COMPUTE_REPLICA=${13}
+COMPUTE_VM_SIZE=${14}
+COMPUTE_OS_DISK=${15}
+PULL_SECRET=${16}
 
 sudo ssh-keygen -t rsa -b 4096 -N '' -f /home/root/.ssh/openshift
 sudo eval "$(ssh-agent -s)"
@@ -44,5 +50,11 @@ sudo sed -i "s/RG-domain/$RG_DOMAIN/g" /var/lib/waagent/custom-script/download/0
 sudo sed -i "s/location/$LOCATION/g" /var/lib/waagent/custom-script/download/0/openshift/install-config.yaml
 sudo sed -i "s/pullSercet/$PULL_SECRET/g" /var/lib/waagent/custom-script/download/0/openshift/install-config.yaml
 sudo sed -i "s/publickey/$SSH_PUBLIC/g" /var/lib/waagent/custom-script/download/0/openshift/install-config.yaml
+sudo sed -i "s/CPREP/$CONTROL_PLANE_REPLICA/g" /var/lib/waagent/custom-script/download/0/openshift/install-config.yaml
+sudo sed -i "s/CPSIZE/$CONTROL_PLANE_VM_SIZE/g" /var/lib/waagent/custom-script/download/0/openshift/install-config.yaml
+sudo sed -i "s/CPOSD/$CONTROL_PLANE_OS_DISK/g" /var/lib/waagent/custom-script/download/0/openshift/install-config.yaml
+sudo sed -i "s/CREP/$COMPUTE_REPLICA/g" /var/lib/waagent/custom-script/download/0/openshift/install-config.yaml
+sudo sed -i "s/CSIZE/$COMPUTE_VM_SIZE/g" /var/lib/waagent/custom-script/download/0/openshift/install-config.yaml
+sudo sed -i "s/COSD/$COMPUTE_OS_DISK/g" /var/lib/waagent/custom-script/download/0/openshift/install-config.yaml
 
 openshift-install create cluster --dir=openshift --log-level=info
