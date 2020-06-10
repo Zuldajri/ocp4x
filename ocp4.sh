@@ -25,9 +25,9 @@ ssh-add /var/lib/waagent/custom-script/download/0/openshiftkey
 
 SSH_PUBLIC=$(cat /var/lib/waagent/custom-script/download/0/openshiftkey.pub)
 
-wget https://mirror.openshift.com/pub/openshift-v4/clients/ocp/4.4.7/openshift-client-linux-4.4.7.tar.gz
+wget https://mirror.openshift.com/pub/openshift-v4/clients/ocp/4.4.7/openshift-client-linux-4.4.7.tar.gz --no-check-certificate
 tar xvf openshift-client-linux-4.4.7.tar.gz
-wget https://mirror.openshift.com/pub/openshift-v4/clients/ocp/4.4.7/openshift-install-linux-4.4.7.tar.gz
+wget https://mirror.openshift.com/pub/openshift-v4/clients/ocp/4.4.7/openshift-install-linux-4.4.7.tar.gz --no-check-certificate
 tar xvf openshift-install-linux-4.4.7.tar.gz
 
 sudo mv oc kubectl openshift-install /usr/local/bin
