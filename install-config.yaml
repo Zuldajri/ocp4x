@@ -6,22 +6,22 @@ controlPlane:
   platform:
     azure:
       osDisk:
-        diskSizeGB: 512
-      type: Standard_D8s_v3
-  replicas: 3
+        diskSizeGB: CPOSD
+      type: CPSIZE
+  replicas: CPREP
 compute:
 - hyperthreading: Enabled
   name: worker
   platform: 
     azure:
-      type: Standard_D2s_v3
+      type: CSIZE
       osDisk:
-        diskSizeGB: 512 
+        diskSizeGB: COSD 
       zones: 
       - "1"
       - "2"
       - "3"
-  replicas: 3
+  replicas: CREP
 metadata:
   name: clusterwill
 networking:
