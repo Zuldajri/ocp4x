@@ -17,6 +17,8 @@ sudo ssh-keygen -t rsa -b 4096 -N '' -f /home/root/.ssh/openshift
 sudo eval "$(ssh-agent -s)"
 sudo ssh-add /home/root/.ssh/openshift
 
+SSH_PUBLIC=$(sudo cat /home/root/.ssh/openshift.pub)
+
 wget https://mirror.openshift.com/pub/openshift-v4/clients/ocp/4.4.7/openshift-client-linux-4.4.7.tar.gz
 tar xvf openshift-client-linux-4.4.7.tar.gz
 wget https://mirror.openshift.com/pub/openshift-v4/clients/ocp/4.4.7/openshift-install-linux-4.4.7.tar.gz
@@ -41,5 +43,6 @@ sudo sed -i "s/clusterwill/$CLUSTER_NAME/g" /var/lib/waagent/custom-script/downl
 sudo sed -i "s/RG-domain/$RG_DOMAIN/g" /var/lib/waagent/custom-script/download/0/openshift/install-config.yaml
 sudo sed -i "s/location/$LOCATION/g" /var/lib/waagent/custom-script/download/0/openshift/install-config.yaml
 sudo sed -i "s/pullSercet/$PULL_SECRET/g" /var/lib/waagent/custom-script/download/0/openshift/install-config.yaml
+sudo sed -i "s/publickey/$SSH_PUBLIC/g" /var/lib/waagent/custom-script/download/0/openshift/install-config.yaml
 
 openshift-install create cluster --dir=openshift --log-level=info
