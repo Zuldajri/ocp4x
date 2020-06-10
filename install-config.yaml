@@ -40,4 +40,3 @@ platform:
 publish: External
 pullSecret: 'pullSercet'
 fips: false
-sshKey: publickey
