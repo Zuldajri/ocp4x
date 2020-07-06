@@ -64,4 +64,9 @@ openshift-install create cluster --dir=openshift --log-level=info
 
 export KUBECONFIG=./openshift/auth/kubeconfig
 
+oc apply -f oauth.yaml
+
+yum install httpd-tools -y
+
+htpasswd -c -B -b ocppass $CLUSTER_ADMIN $CLUSTER_ADMIN_PASSWORD
 
