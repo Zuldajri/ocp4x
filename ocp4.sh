@@ -10,14 +10,16 @@ AZURE_CLIENT_SECRET=$5
 DOMAIN_NAME=$6
 RG_DOMAIN=$7
 CLUSTER_NAME=$8
-LOCATION=$9
-CONTROL_PLANE_REPLICA=${10}
-CONTROL_PLANE_VM_SIZE=${11}
-CONTROL_PLANE_OS_DISK=${12}
-COMPUTE_REPLICA=${13}
-COMPUTE_VM_SIZE=${14}
-COMPUTE_OS_DISK=${15}
-PULL_SECRET=${16}
+CLUSTER_ADMIN=$9
+CLUSTER_ADMIN_PASSWORD=${10}
+LOCATION=${11}
+CONTROL_PLANE_REPLICA=${12}
+CONTROL_PLANE_VM_SIZE=${13}
+CONTROL_PLANE_OS_DISK=${14}
+COMPUTE_REPLICA=${15}
+COMPUTE_VM_SIZE=${16}
+COMPUTE_OS_DISK=${17}
+PULL_SECRET=${18}
 
 ssh-keygen -t rsa -b 4096 -N '' -f /var/lib/waagent/custom-script/download/0/openshiftkey
 eval "$(ssh-agent -s)"
@@ -59,3 +61,7 @@ sudo sed -i "s/COSD/$COMPUTE_OS_DISK/g" /var/lib/waagent/custom-script/download/
 echo sshKey: $SSH_PUBLIC >> /var/lib/waagent/custom-script/download/0/openshift/install-config.yaml
 
 openshift-install create cluster --dir=openshift --log-level=info
+
+export KUBECONFIG=./openshift/auth/kubeconfig
+
+
