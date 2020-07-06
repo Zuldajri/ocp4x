@@ -73,3 +73,5 @@ htpasswd -c -B -b ocppass $CLUSTER_ADMIN $CLUSTER_ADMIN_PASSWORD
 oc create secret generic htpass-secret --from-file=htpasswd=ocppass -n openshift-config
 
 oc apply -f cr.yaml
+
+oc adm policy add-role-to-user admin $CLUSTER_ADMIN
