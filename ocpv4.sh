@@ -28,24 +28,6 @@ ssh-add /var/lib/waagent/custom-script/download/0/openshiftkey
 
 SSH_PUBLIC=$(cat /var/lib/waagent/custom-script/download/0/openshiftkey.pub)
 
-sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc
-sudo sh -c 'echo -e "[azure-cli]
-name=Azure CLI
-baseurl=https://packages.microsoft.com/yumrepos/azure-cli
-enabled=1
-gpgcheck=1
-gpgkey=https://packages.microsoft.com/keys/microsoft.asc" > /etc/yum.repos.d/azure-cli.repo'
-sudo yum install azure-cli -y
-
-az login --service-principal -u $AZURE_CLIENT_ID -p $AZURE_CLIENT_SECRET --tenant $AZURE_TENANT_ID
-
-sudo yum install jq -y
-
-az role assignment create --role "User Access Administrator" --assignee-object-id $(az ad sp list --filter "appId eq '$AZURE_CLIENT_ID'" | jq '.[0].objectId' -r)
-
-az ad app permission add --id $AZURE_CLIENT_ID --api 00000002-0000-0000-c000-000000000000 --api-permissions 824c81eb-e3f8-4ee6-8f6d-de7f50d565b7=Role
-az ad app permission grant --id $AZURE_CLIENT_ID --api 00000002-0000-0000-c000-000000000000
-
 wget https://mirror.openshift.com/pub/openshift-v4/clients/ocp/$CLUSTER_VERSION/openshift-client-linux-$CLUSTER_VERSION.tar.gz
 tar xvf openshift-client-linux-$CLUSTER_VERSION.tar.gz
 wget https://mirror.openshift.com/pub/openshift-v4/clients/ocp/$CLUSTER_VERSION/openshift-install-linux-$CLUSTER_VERSION.tar.gz 
