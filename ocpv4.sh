@@ -46,10 +46,10 @@ az role assignment create --role "User Access Administrator" --assignee-object-i
 az ad app permission add --id $AZURE_CLIENT_ID --api 00000002-0000-0000-c000-000000000000 --api-permissions 824c81eb-e3f8-4ee6-8f6d-de7f50d565b7=Role
 az ad app permission grant --id $AZURE_CLIENT_ID --api 00000002-0000-0000-c000-000000000000
 
-wget https://mirror.openshift.com/pub/openshift-v4/clients/ocp/4.4.10/openshift-client-linux-4.4.10.tar.gz
-tar xvf openshift-client-linux-4.4.10.tar.gz
-wget https://mirror.openshift.com/pub/openshift-v4/clients/ocp/4.4.10/openshift-install-linux-4.4.10.tar.gz 
-tar xvf openshift-install-linux-4.4.10.tar.gz
+wget https://mirror.openshift.com/pub/openshift-v4/clients/ocp/$CLUSTER_VERSION/openshift-client-linux-$CLUSTER_VERSION.tar.gz
+tar xvf openshift-client-linux-$CLUSTER_VERSION.tar.gz
+wget https://mirror.openshift.com/pub/openshift-v4/clients/ocp/$CLUSTER_VERSION/openshift-install-linux-$CLUSTER_VERSION.tar.gz 
+tar xvf openshift-install-linux-$CLUSTER_VERSION.tar.gz
 
 sudo mv oc kubectl openshift-install /usr/local/bin
 
