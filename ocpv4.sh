@@ -35,7 +35,7 @@ baseurl=https://packages.microsoft.com/yumrepos/azure-cli
 enabled=1
 gpgcheck=1
 gpgkey=https://packages.microsoft.com/keys/microsoft.asc" > /etc/yum.repos.d/azure-cli.repo'
-sudo yum install azure-cli
+sudo yum install azure-cli -y
 
 az login --service-principal -u $AZURE_CLIENT_ID -p $AZURE_CLIENT_SECRET --tenant $AZURE_TENANT_ID
 
