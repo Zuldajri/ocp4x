@@ -63,16 +63,3 @@ echo sshKey: $SSH_PUBLIC >> /var/lib/waagent/custom-script/download/0/openshift/
 
 openshift-install create cluster --dir=openshift --log-level=info
 
-export KUBECONFIG=./openshift/auth/kubeconfig
-
-oc apply -f oauth.yaml
-
-yum install httpd-tools -y
-
-htpasswd -c -B -b ocppass $CLUSTER_ADMIN $CLUSTER_ADMIN_PASSWORD
-
-oc create secret generic htpass-secret --from-file=htpasswd=ocppass -n openshift-config
-
-oc apply -f cr.yaml
-
-oc adm policy add-role-to-user admin $CLUSTER_ADMIN
