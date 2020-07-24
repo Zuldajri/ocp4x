@@ -10,16 +10,17 @@ AZURE_CLIENT_SECRET=$5
 DOMAIN_NAME=$6
 RG_DOMAIN=$7
 CLUSTER_NAME=$8
-CLUSTER_ADMIN=$9
-CLUSTER_ADMIN_PASSWORD=${10}
-LOCATION=${11}
-CONTROL_PLANE_REPLICA=${12}
-CONTROL_PLANE_VM_SIZE=${13}
-CONTROL_PLANE_OS_DISK=${14}
-COMPUTE_REPLICA=${15}
-COMPUTE_VM_SIZE=${16}
-COMPUTE_OS_DISK=${17}
-PULL_SECRET=${18}
+CLUSTER_VERSION=$9
+CLUSTER_ADMIN=${10}
+CLUSTER_ADMIN_PASSWORD=${11}
+LOCATION=${12}
+CONTROL_PLANE_REPLICA=${13}
+CONTROL_PLANE_VM_SIZE=${14}
+CONTROL_PLANE_OS_DISK=${15}
+COMPUTE_REPLICA=${16}
+COMPUTE_VM_SIZE=${17}
+COMPUTE_OS_DISK=${18}
+PULL_SECRET=${19}
 
 ssh-keygen -t rsa -b 4096 -N '' -f /var/lib/waagent/custom-script/download/0/openshiftkey
 eval "$(ssh-agent -s)"
@@ -27,10 +28,10 @@ ssh-add /var/lib/waagent/custom-script/download/0/openshiftkey
 
 SSH_PUBLIC=$(cat /var/lib/waagent/custom-script/download/0/openshiftkey.pub)
 
-wget https://mirror.openshift.com/pub/openshift-v4/clients/ocp/4.4.10/openshift-client-linux-4.4.10.tar.gz
-tar xvf openshift-client-linux-4.4.10.tar.gz
-wget https://mirror.openshift.com/pub/openshift-v4/clients/ocp/4.4.10/openshift-install-linux-4.4.10.tar.gz 
-tar xvf openshift-install-linux-4.4.10.tar.gz
+wget https://mirror.openshift.com/pub/openshift-v4/clients/ocp/$CLUSTER_VERSION/openshift-client-linux-$CLUSTER_VERSION.tar.gz
+tar xvf openshift-client-linux-$CLUSTER_VERSION.tar.gz
+wget https://mirror.openshift.com/pub/openshift-v4/clients/ocp/$CLUSTER_VERSION/openshift-install-linux-$CLUSTER_VERSION.tar.gz 
+tar xvf openshift-install-linux-$CLUSTER_VERSION.tar.gz
 
 sudo mv oc kubectl openshift-install /usr/local/bin
 
