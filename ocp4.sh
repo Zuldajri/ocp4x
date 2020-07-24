@@ -7,18 +7,19 @@ AZURE_CLIENT_ID=$2
 AZURE_TENANT_ID=$3
 AZURE_SUBSCRIPTION_ID=$4
 AZURE_CLIENT_SECRET=$5
-DOMAIN_NAME=$6
-RG_DOMAIN=$7
-CLUSTER_NAME=$8
-CLUSTER_VERSION=$9
-LOCATION=${10}
-CONTROL_PLANE_REPLICA=${11}
-CONTROL_PLANE_VM_SIZE=${12}
-CONTROL_PLANE_OS_DISK=${13}
-COMPUTE_REPLICA=${14}
-COMPUTE_VM_SIZE=${15}
-COMPUTE_OS_DISK=${16}
-PULL_SECRET=${17}
+KEYVAULT_NAME=$6
+DOMAIN_NAME=$7
+RG_DOMAIN=$8
+CLUSTER_NAME=$9
+CLUSTER_VERSION=${10}
+LOCATION=${11}
+CONTROL_PLANE_REPLICA=${12}
+CONTROL_PLANE_VM_SIZE=${13}
+CONTROL_PLANE_OS_DISK=${14}
+COMPUTE_REPLICA=${15}
+COMPUTE_VM_SIZE=${16}
+COMPUTE_OS_DISK=${17}
+PULL_SECRET=${18}
 
 ssh-keygen -t rsa -b 4096 -N '' -f /var/lib/waagent/custom-script/download/0/openshiftkey
 eval "$(ssh-agent -s)"
@@ -60,4 +61,19 @@ sudo sed -i "s/COMPUTE_OS_DISK/$COMPUTE_OS_DISK/g" /var/lib/waagent/custom-scrip
 echo sshKey: $SSH_PUBLIC >> /var/lib/waagent/custom-script/download/0/openshift/install-config.yaml
 
 openshift-install create cluster --dir=openshift --log-level=info
+
+sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc
+sudo sh -c 'echo -e "[azure-cli]
+name=Azure CLI
+baseurl=https://packages.microsoft.com/yumrepos/azure-cli
+enabled=1
+gpgcheck=1
+gpgkey=https://packages.microsoft.com/keys/microsoft.asc" > /etc/yum.repos.d/azure-cli.repo'
+sudo yum install azure-cli
+
+az login --service-principal -u $AZURE_CLIENT_ID -p $AZURE_CLIENT_SECRET --tenant $AZURE_TENANT_ID
+az keyvault secret set --vault-name $KEYVAULT_NAME -n kubeadmin-password --file /var/lib/waagent/custom-script/download/0/openshift/auth/kubeadmin-password
+az keyvault secret set --vault-name $KEYVAULT_NAME -n kubeconfig --file /var/lib/waagent/custom-script/download/0/openshift/auth/kubeconfig
+az keyvault secret set --vault-name $KEYVAULT_NAME -n clusterPrivateKey --file /var/lib/waagent/custom-script/download/0/openshiftkey
+az keyvault secret set --vault-name $KEYVAULT_NAME -n clusterPublicKey --file /var/lib/waagent/custom-script/download/0/openshiftkey.pub
 
