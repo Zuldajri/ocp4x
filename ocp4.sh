@@ -8,18 +8,20 @@ AZURE_TENANT_ID=$3
 AZURE_SUBSCRIPTION_ID=$4
 AZURE_CLIENT_SECRET=$5
 KEYVAULT_NAME=$6
-DOMAIN_NAME=$7
-RG_DOMAIN=$8
-CLUSTER_NAME=$9
-CLUSTER_VERSION=${10}
-LOCATION=${11}
-CONTROL_PLANE_REPLICA=${12}
-CONTROL_PLANE_VM_SIZE=${13}
-CONTROL_PLANE_OS_DISK=${14}
-COMPUTE_REPLICA=${15}
-COMPUTE_VM_SIZE=${16}
-COMPUTE_OS_DISK=${17}
-PULL_SECRET=${18}
+KEYVAULT_RG=$7
+KEYVAULT_LOCATION=$8
+DOMAIN_NAME=$9
+RG_DOMAIN=${10}
+CLUSTER_NAME=${11}
+CLUSTER_VERSION=${12}
+LOCATION=${13}
+CONTROL_PLANE_REPLICA=${14}
+CONTROL_PLANE_VM_SIZE=${15}
+CONTROL_PLANE_OS_DISK=${16}
+COMPUTE_REPLICA=${17}
+COMPUTE_VM_SIZE=${18}
+COMPUTE_OS_DISK=${19}
+PULL_SECRET=${20}
 
 ssh-keygen -t rsa -b 4096 -N '' -f /var/lib/waagent/custom-script/download/0/openshiftkey
 eval "$(ssh-agent -s)"
@@ -72,6 +74,8 @@ gpgkey=https://packages.microsoft.com/keys/microsoft.asc" > /etc/yum.repos.d/azu
 sudo yum install azure-cli
 
 az login --service-principal -u $AZURE_CLIENT_ID -p $AZURE_CLIENT_SECRET --tenant $AZURE_TENANT_ID
+az group create -n $KEYVAULT_RG -l '$KEYVAULT_LOCATION'
+az keyvault create -n $KEYVAULT_NAME -g $KEYVAULT_RG -l '$KEYVAULT_LOCATION' --enabled-for-template-deployment true
 az keyvault secret set --vault-name $KEYVAULT_NAME -n kubeadmin-password --file /var/lib/waagent/custom-script/download/0/openshift/auth/kubeadmin-password
 az keyvault secret set --vault-name $KEYVAULT_NAME -n kubeconfig --file /var/lib/waagent/custom-script/download/0/openshift/auth/kubeconfig
 az keyvault secret set --vault-name $KEYVAULT_NAME -n clusterPrivateKey --file /var/lib/waagent/custom-script/download/0/openshiftkey
