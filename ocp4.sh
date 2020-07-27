@@ -31,6 +31,13 @@ ENABLE_FIPS=${24}
 PORT_PUBLISH=${25}
 
 
+wget https://mirror.openshift.com/pub/openshift-v4/clients/ocp/$CLUSTER_VERSION/openshift-client-linux-$CLUSTER_VERSION.tar.gz
+tar xvf openshift-client-linux-$CLUSTER_VERSION.tar.gz
+wget https://mirror.openshift.com/pub/openshift-v4/clients/ocp/$CLUSTER_VERSION/openshift-install-linux-$CLUSTER_VERSION.tar.gz
+tar xvf openshift-install-linux-$CLUSTER_VERSION.tar.gz
+sudo mv oc kubectl openshift-install /usr/local/bin
+
+
 sudo mkdir .azure
 sudo wget https://raw.githubusercontent.com/Zuldajri/ocp4/master/osServicePrincipal.json -O /var/lib/waagent/custom-script/download/0/.azure/osServicePrincipal.json
 sudo sed -i "s/AZURE_SUBSCRIPTION_ID/$AZURE_SUBSCRIPTION_ID/g" /var/lib/waagent/custom-script/download/0/.azure/osServicePrincipal.json
@@ -55,6 +62,9 @@ sudo sed -i "s/COMPUTE_OS_DISK/$COMPUTE_OS_DISK/g" /var/lib/waagent/custom-scrip
 sudo sed -i "s/ENABLE_FIPS/$ENABLE_FIPS/g" /var/lib/waagent/custom-script/download/0/openshift/install-config.yaml
 sudo sed -i "s/PORT_PUBLISH/$PORT_PUBLISH/g" /var/lib/waagent/custom-script/download/0/openshift/install-config.yaml
 sudo sed -i "s/SSH_KEY/$SSH_KEY/g" /var/lib/waagent/custom-script/download/0/openshift/install-config.yaml
+
+
+
 
 openshift-install create cluster --dir=openshift --log-level=info
 
