@@ -39,6 +39,6 @@ platform:
     region: LOCATION
 pullSecret: 'PULL_SECRET'
 fips: ENABLE_FIPS
-publish: $PORT_PUBLISH
+publish: PORT_PUBLISH
 sshKey: |
-  $SSH_KEY
+  SSH_KEY
