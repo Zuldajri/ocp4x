@@ -3,179 +3,95 @@
 	"contentVersion": "1.0.0.0",
 	"parameters": {
 		"location": {
-			"type": "string",
+			"type": "string"
 		},
 		"ocpScriptUrl": {
-			"type": "string",
+			"type": "string"
 		},
 		"ocp4": {
-			"type": "string",
-		},
-		"controlPlaneReplica": {
-			"type": "int",
-			"metadata": {
-				"description": "Number of OpenShift Master nodes"
-			}
-		},
-		"computeReplica": {
-			"type": "int",
-			"metadata": {
-				"description": "Number of OpenShift nodes"
-			}
+			"type": "string"
 		},
 		"adminUsername": {
 			"type": "string",
-			"minLength": 1,
-			"metadata": {
-				"description": "Administrator username on all VMs"
-			}
+			"minLength": 1
+		},
+		"adminPublicKey": {
+			"type": "string"
 		},
 		"openshiftUsername": {
 			"type": "securestring",
-			"minLength": 1,
-			"metadata": {
-				"description": "Administrator password for OpenShift Console"
-			}
+			"minLength": 1
 		},
 		"openshiftPassword": {
 			"type": "securestring",
-			"minLength": 1,
-			"metadata": {
-				"description": "Administrator password for OpenShift Console"
-			}
+			"minLength": 1
 		},
 		"aadClientId": {
-			"type": "string",
-			"metadata": {
-				"description": "Azure AD Client ID"
-			}
+			"type": "string"
 		},
 		"aadClientSecret": {
-			"type": "securestring",
-			"metadata": {
-				"description": "Azure AD Client Secret"
-			}
+			"type": "securestring"
+		},
+		"keyVaultName": {
+			"type": "string"
+		},
+		"keyVaultRg": {
+			"type": "string"
+		},
+		"keyVaultLocation": {
+			"type": "string"
+		},
+		"bastionHostname": {
+			"type": "string"
+		},
+		"domainName": {
+			"type": "string"
+		},
+		"domainRg": {
+			"type": "string"
+		},
+		"clusterName": {
+			"type": "string"
+		},
+		"clusterVersion": {
+			"type": "string"
+		},
+		"clusterLocation": {
+			"type": "string"
 		},
 		"pullSecret": {
 			"type": "string",
-			"minLength": 1,
-			"metadata": {
-				"description": "OCP Pull Secret"
-			}
+			"minLength": 1
 		},
-
-		"virtualNetworkCIDR": {
-			"type": "string",
-			"metadata": {
-				"description": "Virtual Network address prefix"
-			}
+		"controlPlaneReplica": {
+			"type": "int"
 		},
-		"pxSpecUrl" : {
-			"type": "string",
-			"metadata": {
-				"description": "Portworx Spec URL"
-			}
+		"computeReplica": {
+			"type": "int"
 		},
-		"storageOption": {
-			"type": "string",
-			"metadata": {
-				"description": "nfs or glusterfs"
-			}
+		"controlPlaneVmSize": {
+			"type": "string"
 		},
-		"bastionHostname": {
-			"type": "string",
-			"metadata": {
-				"description": "Bastion Hostname"
-			}
+		"computeVmSize": {
+			"type": "string"
 		},
-		"nfsHostname": {
-			"type": "string",
-			"metadata": {
-				"description": "NFS Hostname"
-			}
+		"controlPlaneOsDisk": {
+			"type": "string"
 		},
-		"singleZoneOrMultiZone": {
-			"type": "string",
-			"metadata": {
-				"description": "Deploy to a Single AZ or multiple AZs"
-			}
-		},
-		"dnsZone": {
-			"type": "string",
-			"metadata": {
-				"description": "Domain name created with the App Service"
-			}
-		},
-		"dnsZoneRG": {
-			"type": "string",
-			"metadata": {
-				"description": "Resource Group that contains the domain name"
-			}
-		},
-		"masterInstanceType": {
-			"type": "string",
-			"metadata": {
-				"description": "OpenShift Master VM size. Use VMs with Premium Storage support only."
-			}
-		},
-		"workerInstanceType": {
-			"type": "string",
-			"metadata": {
-				"description": "OpenShift Node VM(s) size. Use VMs with Premium Storage support only."
-			}
-		},
-		"clusterName": {
-			"type": "string",
-			"metadata": {
-				"description": "Cluster resources prefix"
-			}
-		},
-		"networkResourceGroup": {
-			"type": "string",
-			"metadata": {
-				"description": "Resource Group for Vnet."
-			}
-		},
-		"masterSubnetName": {
-			"type": "string",
-			"metadata": {
-				"description": "Name of new or existing master subnet"
-			}
-		},
-		"workerSubnetName": {
-			"type": "string",
-			"metadata": {
-				"description": "Name of new or existing worker subnet"
-			}
+		"computeOsDisk": {
+			"type": "string"
 		},
 		"enableFips": {
-			"type": "bool",
-            "metadata": {
-                "description": "Enable FIPS encryption"
-            }
+			"type": "bool"
 		},
 		"privateOrPublic": {
-			"type": "string",
-			"metadata": {
-				"description": "Public or private facing endpoints"
-			}
-		},
-		"adminPublicKey": {
-			"type": "string",
-			"metadata": {
-				"description": "SSH public key for all VMs"
-			}
+			"type": "string"
 		}
 	},
 	"variables": {
 		"singlequote": "'",
 		"tenantId": "[subscription().tenantId]",
-		"subscriptionId": "[subscription().subscriptionId]",
-		"resourceGroupName": "[resourceGroup().name]",
-		"cidr-prefix": "[split(parameters('virtualNetworkCIDR'), '.')[0]]",
-		"clusterNetworkCidr": "[concat(variables('cidr-prefix'), '.128.0.0/14')]",
-		"hostAddressPrefix": 23,
-		"serviceNetworkCidr": "192.30.0.0/16"
+		"subscriptionId": "[subscription().subscriptionId]"
 	},
 	"resources": [{
 		"type": "Microsoft.Compute/virtualMachines/extensions",
@@ -196,7 +112,7 @@
 				]
 			},
 			"protectedSettings": {
-				"commandToExecute": "[concat('bash ', parameters('ocp4'), ' \"', parameters('adminUsername'), '\" ', '\"', parameters('openshiftPassword'), '\" ', '\"', parameters('adminPublicKey'), '\" ', '\"', parameters('computeReplica'), '\" ', '\"', parameters('controlPlaneReplica'), '\" ', '\"', variables('subscriptionId'), '\" ', '\"', variables('tenantId'), '\" ', '\"', parameters('aadClientId'), '\" ', '\"', parameters('aadClientSecret'), '\" ', '\"', variables('resourceGroupName'), '\" ', '\"', parameters('location'), '\"', ' \"', parameters('pxSpecUrl'), '\"', ' \"', parameters('storageOption'), '\"', ' \"', parameters('nfsHostname'), '\"', ' \"', parameters('singleZoneOrMultiZone'), '\"', ' \"', parameters('_artifactsLocation'), '\"', ' \"', parameters('_artifactsLocationSasToken'), '\"', ' \"', parameters('dnsZone'), '\"', ' \"', parameters('masterInstanceType'), '\"', ' \"', parameters('workerInstanceType'), '\"', ' \"', parameters('clusterName'), '\"', ' \"', variables('clusterNetworkCidr'), '\"', ' \"', variables('hostAddressPrefix'), '\"', ' \"', parameters('virtualNetworkCIDR'), '\"', ' \"', variables('serviceNetworkCidr'), '\"', ' \"', parameters('dnsZoneRG'), '\"', ' \"', parameters('networkResourceGroup'), '\"', ' \"', parameters('masterSubnetName'), '\"', ' \"', parameters('workerSubnetName'), '\" ', variables('singlequote'), parameters('pullSecret'), variables('singlequote'), ' \"', parameters('enableFips'), '\"', ' \"', parameters('privateOrPublic'), '\"', ' \"', parameters('openshiftUsername'), '\"')]"
+				"commandToExecute": "[concat('bash ', parameters('ocp4'), ' \"', variables('tenantId'), '\" ', '\"', variables('subscriptionId'), '\" ', '\"', parameters('adminUsername'), '\" ', '\"', parameters('adminPublicKey'), '\"', ' \"', parameters('openshiftUsername'), '\" ', '\"', parameters('openshiftPassword'), '\" ', '\"', parameters('aadClientId'), '\" ', '\"', parameters('aadClientSecret'), '\" ', '\"', parameters('keyVaultName'), '\" ', '\"', parameters('keyVaultRg'), '\"', ' \"', parameters('keyVaultLocation'), '\"', ' \"', parameters('domainName'), '\"', ' \"', parameters('domainRg'), '\"', ' \"', parameters('clusterName'), '\"', ' \"', parameters('clusterVersion'), '\"', ' \"', parameters('clusterLocation'), '\" ', variables('singlequote'), parameters('pullSecret'), variables('singlequote'), ' \"', parameters('controlPlaneReplica'), '\"', ' \"', parameters('computeReplica'), '\" ', '\"', parameters('controlPlaneVmSize'), '\"', ' \"', parameters('computeVmSize'), '\" ', '\"', parameters('controlPlaneOsDisk'), '\"', ' \"', parameters('computeOsDisk'), '\" ', '\"', parameters('enableFips'), '\"', ' \"', parameters('privateOrPublic'), '\"')]"
 			}
 		}
 	}],
