@@ -36,7 +36,7 @@ networking:
 platform:
   azure:
     baseDomainResourceGroupName: RG_DOMAIN
-    region: LOCATION
+    region: CLUSTER_LOCATION
 pullSecret: 'PULL_SECRET'
 fips: ENABLE_FIPS
 publish: PORT_PUBLISH
