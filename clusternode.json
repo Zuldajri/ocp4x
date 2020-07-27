@@ -72,12 +72,6 @@
 			"metadata": {
 				"description": "Image Reference"
 			}
-		},
-		"redHatTags": {
-			"type": "object",
-			"metadata": {
-				"description": "Red Hat Tags"
-			}
 		}
 	},
 	"variables": {
