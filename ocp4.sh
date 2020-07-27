@@ -64,15 +64,18 @@ sudo sed -i "s/PORT_PUBLISH/$PORT_PUBLISH/g" /var/lib/waagent/custom-script/down
 sudo sed -i "s/SSH_KEY/$SSH_KEY/g" /var/lib/waagent/custom-script/download/0/openshift/install-config.yaml
 
 
-
-
 openshift-install create cluster --dir=openshift --log-level=info
 
 
+
+export KUBECONFIG=./openshift/auth/kubeconfig
+
 yum install -y httpd-tools
-
-
-
+yum htpasswd -c -B -b ocppass $OPENSHIFT_USER $OPENSHIFT_PASSWORD
+oc create secret generic htpass-secret --from-file=htpasswd=ocppass -n openshift-config
+sudo wget https://raw.githubusercontent.com/Zuldajri/ocp4/master/cr.yaml
+oc apply -f cr.yaml
+oc adm policy add-cluster-role-to-user cluster-admin '$OPENSHIFT_USER'
 
 
 sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc
