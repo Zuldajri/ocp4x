@@ -5,22 +5,19 @@
 		"location": {
 			"type": "string",
 		},
-		"openshiftDeploymentScriptUrl": {
+		"ocpScriptUrl": {
 			"type": "string",
 		},
-		"openshiftDeploymentScriptFileName": {
+		"ocp4": {
 			"type": "string",
-			"metadata": {
-				"description": "Bastion prep script file name"
-			}
 		},
-		"masterInstanceCount": {
+		"controlPlaneReplica": {
 			"type": "int",
 			"metadata": {
 				"description": "Number of OpenShift Master nodes"
 			}
 		},
-		"workerInstanceCount": {
+		"computeReplica": {
 			"type": "int",
 			"metadata": {
 				"description": "Number of OpenShift nodes"
@@ -57,12 +54,6 @@
 			"type": "securestring",
 			"metadata": {
 				"description": "Azure AD Client Secret"
-			}
-		},
-		"redHatTags": {
-			"type": "object",
-			"metadata": {
-				"description": "Red Hat Tags"
 			}
 		},
 		"pullSecret": {
@@ -209,11 +200,11 @@
 			"autoUpgradeMinorVersion": true,
 			"settings": {
 				"fileUris": [
-					"[parameters('openshiftDeploymentScriptUrl')]"
+					"[parameters('ocpScriptUrl')]"
 				]
 			},
 			"protectedSettings": {
-				"commandToExecute": "[concat('bash ', parameters('openshiftDeploymentScriptFileName'), ' \"', parameters('adminUsername'), '\" ', '\"', parameters('openshiftPassword'), '\" ', '\"', parameters('sshPublicKey'), '\" ', '\"', parameters('workerInstanceCount'), '\" ', '\"', parameters('masterInstanceCount'), '\" ', '\"', variables('subscriptionId'), '\" ', '\"', variables('tenantId'), '\" ', '\"', parameters('aadClientId'), '\" ', '\"', parameters('aadClientSecret'), '\" ', '\"', variables('resourceGroupName'), '\" ', '\"', parameters('location'), '\" ', ' \"', parameters('virtualNetworkName'), '\"', ' \"', parameters('pxSpecUrl'), '\"', ' \"', parameters('storageOption'), '\"', ' \"', parameters('nfsHostname'), '\"', ' \"', parameters('singleZoneOrMultiZone'), '\"', ' \"', parameters('_artifactsLocation'), '\"', ' \"', parameters('_artifactsLocationSasToken'), '\"', ' \"', parameters('dnsZone'), '\"', ' \"', parameters('masterInstanceType'), '\"', ' \"', parameters('workerInstanceType'), '\"', ' \"', parameters('clusterName'), '\"', ' \"', variables('clusterNetworkCidr'), '\"', ' \"', variables('hostAddressPrefix'), '\"', ' \"', parameters('virtualNetworkCIDR'), '\"', ' \"', variables('serviceNetworkCidr'), '\"', ' \"', parameters('dnsZoneRG'), '\"', ' \"', parameters('networkResourceGroup'), '\"', ' \"', parameters('masterSubnetName'), '\"', ' \"', parameters('workerSubnetName'), '\" ', variables('singlequote'), parameters('pullSecret'), variables('singlequote'), ' \"', parameters('enableFips'), '\"', ' \"', parameters('privateOrPublic'), '\"', ' \"', parameters('openshiftUsername'), '\"')]"
+				"commandToExecute": "[concat('bash ', parameters('ocp4'), ' \"', parameters('adminUsername'), '\" ', '\"', parameters('openshiftPassword'), '\" ', '\"', parameters('sshPublicKey'), '\" ', '\"', parameters('computeReplica'), '\" ', '\"', parameters('controlPlaneReplica'), '\" ', '\"', variables('subscriptionId'), '\" ', '\"', variables('tenantId'), '\" ', '\"', parameters('aadClientId'), '\" ', '\"', parameters('aadClientSecret'), '\" ', '\"', variables('resourceGroupName'), '\" ', '\"', parameters('location'), '\" ', ' \"', parameters('virtualNetworkName'), '\"', ' \"', parameters('pxSpecUrl'), '\"', ' \"', parameters('storageOption'), '\"', ' \"', parameters('nfsHostname'), '\"', ' \"', parameters('singleZoneOrMultiZone'), '\"', ' \"', parameters('_artifactsLocation'), '\"', ' \"', parameters('_artifactsLocationSasToken'), '\"', ' \"', parameters('dnsZone'), '\"', ' \"', parameters('masterInstanceType'), '\"', ' \"', parameters('workerInstanceType'), '\"', ' \"', parameters('clusterName'), '\"', ' \"', variables('clusterNetworkCidr'), '\"', ' \"', variables('hostAddressPrefix'), '\"', ' \"', parameters('virtualNetworkCIDR'), '\"', ' \"', variables('serviceNetworkCidr'), '\"', ' \"', parameters('dnsZoneRG'), '\"', ' \"', parameters('networkResourceGroup'), '\"', ' \"', parameters('masterSubnetName'), '\"', ' \"', parameters('workerSubnetName'), '\" ', variables('singlequote'), parameters('pullSecret'), variables('singlequote'), ' \"', parameters('enableFips'), '\"', ' \"', parameters('privateOrPublic'), '\"', ' \"', parameters('openshiftUsername'), '\"')]"
 			}
 		}
 	}],
