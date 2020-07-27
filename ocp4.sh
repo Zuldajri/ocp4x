@@ -33,26 +33,7 @@ PUBLISH=${25}
 #Var
 export INSTALLERHOME=/home/$ADMIN_USER/.openshift
 
-# Grow Root File System
-yum -y install cloud-utils-growpart.noarch
-echo $(date) " - Grow Root FS"
 
-rootdev=`findmnt --target / -o SOURCE -n`
-rootdrivename=`lsblk -no pkname $rootdev`
-rootdrive="/dev/"$rootdrivename
-name=`lsblk  $rootdev -o NAME | tail -1`
-part_number=${name#*${rootdrivename}}
-
-growpart $rootdrive $part_number -u on
-xfs_growfs $rootdev
-
-if [ $? -eq 0 ]
-then
-    echo $(date) " - Root File System successfully extended"
-else
-    echo $(date) " - Root File System failed to be grown"
-	exit 20
-fi
 
 echo $(date) " - Install Podman"
 yum install -y podman
