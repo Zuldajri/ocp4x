@@ -30,50 +30,39 @@ COMPUTE_OS_DISK=${23}
 FIPS=${24}
 PUBLISH=${25}
 
+#Var
+export INSTALLERHOME=/home/$ADMIN_USER/.openshift
 
+# Grow Root File System
+yum -y install cloud-utils-growpart.noarch
+echo $(date) " - Grow Root FS"
 
+rootdev=`findmnt --target / -o SOURCE -n`
+rootdrivename=`lsblk -no pkname $rootdev`
+rootdrive="/dev/"$rootdrivename
+name=`lsblk  $rootdev -o NAME | tail -1`
+part_number=${name#*${rootdrivename}}
 
-ssh-keygen -t rsa -b 4096 -N '' -f /var/lib/waagent/custom-script/download/0/openshiftkey
-eval "$(ssh-agent -s)"
-ssh-add /var/lib/waagent/custom-script/download/0/openshiftkey
+growpart $rootdrive $part_number -u on
+xfs_growfs $rootdev
 
-SSH_PUBLIC=$(cat /var/lib/waagent/custom-script/download/0/openshiftkey.pub)
+if [ $? -eq 0 ]
+then
+    echo $(date) " - Root File System successfully extended"
+else
+    echo $(date) " - Root File System failed to be grown"
+	exit 20
+fi
 
-wget https://mirror.openshift.com/pub/openshift-v4/clients/ocp/$CLUSTER_VERSION/openshift-client-linux-$CLUSTER_VERSION.tar.gz
-tar xvf openshift-client-linux-$CLUSTER_VERSION.tar.gz
-wget https://mirror.openshift.com/pub/openshift-v4/clients/ocp/$CLUSTER_VERSION/openshift-install-linux-$CLUSTER_VERSION.tar.gz 
-tar xvf openshift-install-linux-$CLUSTER_VERSION.tar.gz
+echo $(date) " - Install Podman"
+yum install -y podman
+echo $(date) " - Install Podman Complete"
 
-sudo mv oc kubectl openshift-install /usr/local/bin
+echo $(date) " - Install httpd-tools"
+yum install -y httpd-tools
+echo $(date) " - Install httpd-tools Complete"
 
-sudo mkdir .azure
-sudo wget https://raw.githubusercontent.com/Zuldajri/ocp4/master/osServicePrincipal.json -O /var/lib/waagent/custom-script/download/0/.azure/osServicePrincipal.json
-
-sudo sed -i "s/AZURE_SUBSCRIPTION_ID/$AZURE_SUBSCRIPTION_ID/g" /var/lib/waagent/custom-script/download/0/.azure/osServicePrincipal.json
-sudo sed -i "s/AZURE_CLIENT_ID/$AZURE_CLIENT_ID/g" /var/lib/waagent/custom-script/download/0/.azure/osServicePrincipal.json
-sudo sed -i "s/AZURE_CLIENT_SECRET/$AZURE_CLIENT_SECRET/g" /var/lib/waagent/custom-script/download/0/.azure/osServicePrincipal.json
-sudo sed -i "s/AZURE_TENANT_ID/$AZURE_TENANT_ID/g" /var/lib/waagent/custom-script/download/0/.azure/osServicePrincipal.json
-
-sudo mkdir openshift
-
-sudo wget https://raw.githubusercontent.com/Zuldajri/ocp4/master/install-config.yaml -O /var/lib/waagent/custom-script/download/0/openshift/install-config.yaml
-
-sudo sed -i "s/DOMAIN_NAME/$DOMAIN_NAME/g" /var/lib/waagent/custom-script/download/0/openshift/install-config.yaml
-sudo sed -i "s/CLUSTER_NAME/$CLUSTER_NAME/g" /var/lib/waagent/custom-script/download/0/openshift/install-config.yaml
-sudo sed -i "s/RG_DOMAIN/$RG_DOMAIN/g" /var/lib/waagent/custom-script/download/0/openshift/install-config.yaml
-sudo sed -i "s/LOCATION/$LOCATION/g" /var/lib/waagent/custom-script/download/0/openshift/install-config.yaml
-sudo sed -i "s/PULL_SECRET/$PULL_SECRET/g" /var/lib/waagent/custom-script/download/0/openshift/install-config.yaml
-sudo sed -i "s/CONTROL_PLANE_REPLICA/$CONTROL_PLANE_REPLICA/g" /var/lib/waagent/custom-script/download/0/openshift/install-config.yaml
-sudo sed -i "s/CONTROL_PLANE_VM_SIZE/$CONTROL_PLANE_VM_SIZE/g" /var/lib/waagent/custom-script/download/0/openshift/install-config.yaml
-sudo sed -i "s/CONTROL_PLANE_OS_DISK/$CONTROL_PLANE_OS_DISK/g" /var/lib/waagent/custom-script/download/0/openshift/install-config.yaml
-sudo sed -i "s/COMPUTE_REPLICA/$COMPUTE_REPLICA/g" /var/lib/waagent/custom-script/download/0/openshift/install-config.yaml
-sudo sed -i "s/COMPUTE_VM_SIZE/$COMPUTE_VM_SIZE/g" /var/lib/waagent/custom-script/download/0/openshift/install-config.yaml
-sudo sed -i "s/COMPUTE_OS_DISK/$COMPUTE_OS_DISK/g" /var/lib/waagent/custom-script/download/0/openshift/install-config.yaml
-
-echo sshKey: $SSH_PUBLIC >> /var/lib/waagent/custom-script/download/0/openshift/install-config.yaml
-
-openshift-install create cluster --dir=openshift --log-level=info
-
+echo $(date) " - Install Azure CLI"
 sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc
 sudo sh -c 'echo -e "[azure-cli]
 name=Azure CLI
@@ -82,6 +71,104 @@ enabled=1
 gpgcheck=1
 gpgkey=https://packages.microsoft.com/keys/microsoft.asc" > /etc/yum.repos.d/azure-cli.repo'
 sudo yum install azure-cli -y
+echo $(date) " - Install Azure CLI Complete"
+
+echo $(date) " - Download Binaries"
+runuser -l $ADMIN_USER -c "mkdir -p /home/$ADMIN_USER/.openshift"
+
+runuser -l $ADMIN_USER -c "wget https://mirror.openshift.com/pub/openshift-v4/clients/ocp/$CLUSTER_VERSION/openshift-install-linux-$CLUSTER_VERSION.tar.gz"
+runuser -l $ADMIN_USER -c "wget https://mirror.openshift.com/pub/openshift-v4/clients/ocp/$CLUSTER_VERSION/openshift-client-linux-$CLUSTER_VERSION.tar.gz"
+runuser -l $ADMIN_USER -c "tar -xvf openshift-install-linux-$CLUSTER_VERSION.tar.gz -C $INSTALLERHOME"
+runuser -l $ADMIN_USER -c "sudo tar -xvf openshift-client-linux-$CLUSTER_VERSION.tar.gz -C /usr/bin"
+
+chmod +x /usr/bin/kubectl
+chmod +x /usr/bin/oc
+chmod +x $INSTALLERHOME/openshift-install
+echo $(date) " - Download Binaries Done."
+
+echo $(date) " - Setup Azure Credentials for OCP"
+runuser -l $ADMIN_USER -c "mkdir -p /home/$ADMIN_USER/.azure"
+runuser -l $ADMIN_USER -c "touch /home/$ADMIN_USER/.azure/osServicePrincipal.json"
+cat > /home/$ADMIN_USER/.azure/osServicePrincipal.json <<EOF
+{"subscriptionId":"AZURE_SUBSCRIPTION_ID","clientId":"AZURE_CLIENT_ID","clientSecret":"AZURE_CLIENT_SECRET","tenantId":"AZURE_TENANT_ID"}
+EOF
+echo $(date) " - Setup Azure Credentials for OCP - Complete"
+
+echo $(date) " - Setup Install config"
+runuser -l $ADMIN_USER -c "mkdir -p $INSTALLERHOME/openshiftfourx"
+runuser -l $ADMIN_USER -c "touch $INSTALLERHOME/openshiftfourx/install-config.yaml"
+cat > $INSTALLERHOME/openshiftfourx/install-config.yaml <<EOF
+apiVersion: v1
+baseDomain: $DOMAIN_NAME
+controlPlane:
+  hyperthreading: Enabled
+  name: master
+  platform: 
+    azure:
+      osDisk:
+        diskSizeGB: CONTROL_PLANE_OS_DISK
+      type: $CONTROL_PLANE_VM_SIZE
+  replicas: $CONTROL_PLANE_REPLICA
+compute:
+- hyperthreading: Enabled
+  name: worker
+  platform: 
+    azure:
+      type: $COMPUTE_VM_SIZE
+      osDisk:
+        diskSizeGB: $COMPUTE_OS_DISK 
+      zones: 
+      - "1"
+      - "2"
+      - "3"
+  replicas: $COMPUTE_REPLICA
+metadata:
+  name: $CLUSTER_NAME
+networking:
+  clusterNetwork:
+  - cidr: 10.128.0.0/14
+    hostPrefix: 23
+  machineNetwork:
+  - cidr: 10.0.0.0/16
+  networkType: OpenShiftSDN
+  serviceNetwork:
+  - 172.30.0.0/16
+platform:
+  azure:
+    baseDomainResourceGroupName: $RG_DOMAIN
+    region: $LOCATION
+pullSecret: '$PULL_SECRET'
+fips: $FIPS
+publish: $PUBLISH
+sshKey: |
+  $SSH_KEY
+EOF
+echo $(date) " - Setup Install config - Complete"
+
+echo $(date) " - Install OCP"
+runuser -l $ADMIN_USER -c "$INSTALLERHOME/openshift-install create cluster --dir=$INSTALLERHOME/openshiftfourx --log-level=debug"
+runuser -l $ADMIN_USER -c "sleep 120"
+echo $(date) " - OCP Install Complete"
+
+echo $(date) " - Kube Config setup"
+runuser -l $ADMIN_USER -c "mkdir -p /home/$ADMIN_USER/.kube"
+runuser -l $ADMIN_USER -c "cp $INSTALLERHOME/openshiftfourx/auth/kubeconfig /home/$ADMIN_USER/.kube/config"
+echo $(date) "Kube Config setup done"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 az login --service-principal -u $AZURE_CLIENT_ID -p $AZURE_CLIENT_SECRET --tenant $AZURE_TENANT_ID
 az group create -n $KEYVAULT_RG -l $KEYVAULT_LOCATION
