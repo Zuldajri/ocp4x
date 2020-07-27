@@ -31,6 +31,8 @@ ENABLE_FIPS=${24}
 PORT_PUBLISH=${25}
 
 
+SSH_PUBLIC=$(cat /home/$ADMIN_USER/.ssh/authorized_keys)
+
 wget https://mirror.openshift.com/pub/openshift-v4/clients/ocp/$CLUSTER_VERSION/openshift-client-linux-$CLUSTER_VERSION.tar.gz
 tar xvf openshift-client-linux-$CLUSTER_VERSION.tar.gz
 wget https://mirror.openshift.com/pub/openshift-v4/clients/ocp/$CLUSTER_VERSION/openshift-install-linux-$CLUSTER_VERSION.tar.gz
@@ -61,7 +63,8 @@ sudo sed -i "s/COMPUTE_VM_SIZE/$COMPUTE_VM_SIZE/g" /var/lib/waagent/custom-scrip
 sudo sed -i "s/COMPUTE_OS_DISK/$COMPUTE_OS_DISK/g" /var/lib/waagent/custom-script/download/0/openshift/install-config.yaml
 sudo sed -i "s/ENABLE_FIPS/$ENABLE_FIPS/g" /var/lib/waagent/custom-script/download/0/openshift/install-config.yaml
 sudo sed -i "s/PORT_PUBLISH/$PORT_PUBLISH/g" /var/lib/waagent/custom-script/download/0/openshift/install-config.yaml
-sudo sed -i "s/SSH_KEY/$SSH_KEY/g" /var/lib/waagent/custom-script/download/0/openshift/install-config.yaml
+
+echo sshKey: $SSH_PUBLIC >> /var/lib/waagent/custom-script/download/0/openshift/install-config.yaml
 
 
 openshift-install create cluster --dir=openshift --log-level=info
