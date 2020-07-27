@@ -63,12 +63,7 @@
 				"description": "OCP Pull Secret"
 			}
 		},
-		"virtualNetworkName": {
-			"type": "string",
-			"metadata": {
-				"description": "Virtual Network Cluster is deployed in"
-			}
-		},
+
 		"virtualNetworkCIDR": {
 			"type": "string",
 			"metadata": {
@@ -201,7 +196,7 @@
 				]
 			},
 			"protectedSettings": {
-				"commandToExecute": "[concat('bash ', parameters('ocp4'), ' \"', parameters('adminUsername'), '\" ', '\"', parameters('openshiftPassword'), '\" ', '\"', parameters('adminPublicKey'), '\" ', '\"', parameters('computeReplica'), '\" ', '\"', parameters('controlPlaneReplica'), '\" ', '\"', variables('subscriptionId'), '\" ', '\"', variables('tenantId'), '\" ', '\"', parameters('aadClientId'), '\" ', '\"', parameters('aadClientSecret'), '\" ', '\"', variables('resourceGroupName'), '\" ', '\"', parameters('location'), '\" ', ' \"', parameters('virtualNetworkName'), '\"', ' \"', parameters('pxSpecUrl'), '\"', ' \"', parameters('storageOption'), '\"', ' \"', parameters('nfsHostname'), '\"', ' \"', parameters('singleZoneOrMultiZone'), '\"', ' \"', parameters('_artifactsLocation'), '\"', ' \"', parameters('_artifactsLocationSasToken'), '\"', ' \"', parameters('dnsZone'), '\"', ' \"', parameters('masterInstanceType'), '\"', ' \"', parameters('workerInstanceType'), '\"', ' \"', parameters('clusterName'), '\"', ' \"', variables('clusterNetworkCidr'), '\"', ' \"', variables('hostAddressPrefix'), '\"', ' \"', parameters('virtualNetworkCIDR'), '\"', ' \"', variables('serviceNetworkCidr'), '\"', ' \"', parameters('dnsZoneRG'), '\"', ' \"', parameters('networkResourceGroup'), '\"', ' \"', parameters('masterSubnetName'), '\"', ' \"', parameters('workerSubnetName'), '\" ', variables('singlequote'), parameters('pullSecret'), variables('singlequote'), ' \"', parameters('enableFips'), '\"', ' \"', parameters('privateOrPublic'), '\"', ' \"', parameters('openshiftUsername'), '\"')]"
+				"commandToExecute": "[concat('bash ', parameters('ocp4'), ' \"', parameters('adminUsername'), '\" ', '\"', parameters('openshiftPassword'), '\" ', '\"', parameters('adminPublicKey'), '\" ', '\"', parameters('computeReplica'), '\" ', '\"', parameters('controlPlaneReplica'), '\" ', '\"', variables('subscriptionId'), '\" ', '\"', variables('tenantId'), '\" ', '\"', parameters('aadClientId'), '\" ', '\"', parameters('aadClientSecret'), '\" ', '\"', variables('resourceGroupName'), '\" ', '\"', parameters('location'), '\"', ' \"', parameters('pxSpecUrl'), '\"', ' \"', parameters('storageOption'), '\"', ' \"', parameters('nfsHostname'), '\"', ' \"', parameters('singleZoneOrMultiZone'), '\"', ' \"', parameters('_artifactsLocation'), '\"', ' \"', parameters('_artifactsLocationSasToken'), '\"', ' \"', parameters('dnsZone'), '\"', ' \"', parameters('masterInstanceType'), '\"', ' \"', parameters('workerInstanceType'), '\"', ' \"', parameters('clusterName'), '\"', ' \"', variables('clusterNetworkCidr'), '\"', ' \"', variables('hostAddressPrefix'), '\"', ' \"', parameters('virtualNetworkCIDR'), '\"', ' \"', variables('serviceNetworkCidr'), '\"', ' \"', parameters('dnsZoneRG'), '\"', ' \"', parameters('networkResourceGroup'), '\"', ' \"', parameters('masterSubnetName'), '\"', ' \"', parameters('workerSubnetName'), '\" ', variables('singlequote'), parameters('pullSecret'), variables('singlequote'), ' \"', parameters('enableFips'), '\"', ' \"', parameters('privateOrPublic'), '\"', ' \"', parameters('openshiftUsername'), '\"')]"
 			}
 		}
 	}],
