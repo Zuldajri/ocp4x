@@ -33,9 +33,9 @@ PORT_PUBLISH=${25}
 
 SSH_PUBLIC=$(cat /home/$ADMIN_USER/.ssh/authorized_keys)
 
-wget https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest-$CLUSTER_VERSION/openshift-client-linux.tar.gz
+wget https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest-4.$CLUSTER_VERSION/openshift-client-linux.tar.gz
 tar xvf openshift-client-linux.tar.gz
-wget https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest-$CLUSTER_VERSION/openshift-install-linux.tar.gz
+wget https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest-4.$CLUSTER_VERSION/openshift-install-linux.tar.gz
 tar xvf openshift-install-linux.tar.gz
 sudo mv oc kubectl openshift-install /usr/local/bin
 
