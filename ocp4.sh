@@ -70,6 +70,19 @@ openshift-install create cluster --dir=openshift --log-level=info
 
 export KUBECONFIG=./openshift/auth/kubeconfig
 
+sudo wget https://raw.githubusercontent.com/Zuldajri/ocp4/master/oauth.yaml
+sudo wget https://raw.githubusercontent.com/Zuldajri/ocp4/master/cr.yaml
+
+oc apply -f oauth.yaml
+
+yum install httpd-tools -y
+
+htpasswd -c -B -b ocppass $OPENSHIFT_USER $OPENSHIFT_PASSWORD
+oc create secret generic htpass-secret --from-file=htpasswd=ocppass -n openshift-config
+oc apply -f cr.yaml
+
+oc adm policy add-cluster-role-to-user cluster-admin $OPENSHIFT_USER
+
 sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc
 sudo sh -c 'echo -e "[azure-cli]
 name=Azure CLI
