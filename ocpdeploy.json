@@ -5,6 +5,9 @@
 		"location": {
 			"type": "string"
 		},
+		"bastionLocation":{
+			"type": "string"
+		},
 		"ocpScriptUrl": {
 			"type": "string"
 		},
@@ -107,7 +110,7 @@
 	"resources": [{
 		"type": "Microsoft.Compute/virtualMachines/extensions",
 		"name": "[concat(parameters('bastionHostname'), '/deployOpenshift')]",
-		"location": "[parameters('location')]",
+		"location": "[parameters('bastionLocation')]",
 		"apiVersion": "2019-07-01",
 		"tags": {
 			"displayName": "DeployOpenshift"
