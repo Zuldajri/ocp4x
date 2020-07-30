@@ -76,7 +76,7 @@
 	},
 	"variables": {
 		"dataDisks": [{
-			"name": "[concat(parameters('hostName'), '-dataDisk')]",
+			"name": "[concat(parameters('name'), '-dataDisk')]",
 			"diskSizeGB": "[parameters('dataDiskSize')]",
 			"lun": 0,
 			"managedDisk": {
@@ -88,7 +88,7 @@
 	"resources": [
 		{
 			"type": "Microsoft.Compute/virtualMachines",
-			"name": "[parameters('hostname')]",
+			"name": "[parameters('name')]",
 			"location": "[parameters('location')]",
 			"apiVersion": "2019-07-01",
 			"tags": {
@@ -99,7 +99,7 @@
 					"vmSize": "[parameters('vmSize')]"
 				},
 				"osProfile": {
-					"computerName": "[parameters('hostname')]",
+					"computerName": "[parameters('name')]",
 					"adminUsername": "[parameters('adminUsername')]",
 					"linuxConfiguration": {
 						"disablePasswordAuthentication": true,
@@ -114,7 +114,7 @@
 				"storageProfile": {
 					"imageReference": "[parameters('imageReference')]",
 					"osDisk": {
-						"name": "[concat(parameters('hostName'), '-OSdisk')]",
+						"name": "[concat(parameters('name'), '-OSdisk')]",
 						"managedDisk": {
 							"storageAccountType": "[parameters('vmStorageType')]"
 						},
@@ -123,11 +123,11 @@
 						"diskSizeGB": 256,
 						"osType": "Linux"
 					},
-					"dataDisks": "[if(equals(parameters('hostName'), 'Bastion'), json('null'), variables('dataDisks'))]"
+					"dataDisks": "[if(equals(parameters('name'), 'Bastion'), json('null'), variables('dataDisks'))]"
 				},
 				"networkProfile": {
 					"networkInterfaces": [{
-						"id": "[resourceId('Microsoft.Network/networkInterfaces', concat(parameters('hostname'), '-nic'))]"
+						"id": "[resourceId('Microsoft.Network/networkInterfaces', concat(parameters('name'), '-nic'))]"
 					}]
 				},
 				"diagnosticsProfile": {
