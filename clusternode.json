@@ -6,7 +6,7 @@
 			"type": "string",
 			"minLength": 1,
 			"metadata": {
-				"description": "Datacenter Region Location"
+				"description": "Region Location"
 			}
 		},
 		"sshKeyPath": {
@@ -46,13 +46,13 @@
 			"type": "string",
 			"minLength": 1,
 			"metadata": {
-				"description": "VM Hostname"
+				"description": "VM Name"
 			}
 		},
 		"role": {
 			"type": "string",
 			"metadata": {
-				"description": "VM Role for tag"
+				"description": "VM Role"
 			}
 		},
 		"vmStorageType": {
