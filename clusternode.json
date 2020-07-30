@@ -42,7 +42,7 @@
 				"description": "VM Size"
 			}
 		},
-		"hostname": {
+		"name": {
 			"type": "string",
 			"minLength": 1,
 			"metadata": {
