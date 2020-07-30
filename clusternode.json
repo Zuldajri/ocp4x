@@ -49,12 +49,6 @@
 				"description": "VM Name"
 			}
 		},
-		"role": {
-			"type": "string",
-			"metadata": {
-				"description": "VM Role"
-			}
-		},
 		"vmStorageType": {
 			"type": "string",
 			"metadata": {
@@ -91,9 +85,6 @@
 			"name": "[parameters('name')]",
 			"location": "[parameters('location')]",
 			"apiVersion": "2019-07-01",
-			"tags": {
-				"Role": "[parameters('role')]"
-			},
 			"properties": {
 				"hardwareProfile": {
 					"vmSize": "[parameters('vmSize')]"
