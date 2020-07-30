@@ -55,12 +55,6 @@
 				"description": "VM Storage Type"
 			}
 		},
-		"diagStorageAccount": {
-			"type": "string",
-			"metadata": {
-				"description": "Diagnostics Storage Account"
-			}
-		},
 		"imageReference": {
 			"type": "object",
 			"metadata": {
@@ -120,12 +114,6 @@
 					"networkInterfaces": [{
 						"id": "[resourceId('Microsoft.Network/networkInterfaces', concat(parameters('name'), '-nic'))]"
 					}]
-				},
-				"diagnosticsProfile": {
-					"bootDiagnostics": {
-						"enabled": true,
-						"storageUri": "[reference(resourceId('Microsoft.Storage/storageAccounts', parameters('diagStorageAccount')), '2019-06-01').primaryEndpoints['blob']]"
-					}
 				}
 			}
 		}
