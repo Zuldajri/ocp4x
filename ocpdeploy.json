@@ -83,6 +83,21 @@
 		},
 		"privateOrPublic": {
 			"type": "string"
+		},
+		"virtualNetworkName": {
+			"type": "string"
+		},
+		"virtualNetworkCIDR": {
+			"type": "string"
+		},
+		"networkResourceGroup": {
+			"type": "string"
+		},
+		"masterSubnetName": {
+			"type": "string"
+		},
+		"workerSubnetName": {
+			"type": "string"
 		}
 	},
 	"variables": {
