@@ -2,8 +2,6 @@
 
 echo $(date) " - ### Starting Script ###"
 
-set-e
-
 AZURE_TENANT_ID=$1
 AZURE_SUBSCRIPTION_ID=$2
 ADMIN_USER=$3
