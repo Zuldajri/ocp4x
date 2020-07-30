@@ -56,9 +56,6 @@
 		"clusterVersion": {
 			"type": "string"
 		},
-		"clusterLocation": {
-			"type": "string"
-		},
 		"pullSecret": {
 			"type": "string",
 			"minLength": 1
