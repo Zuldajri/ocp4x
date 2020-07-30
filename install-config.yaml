@@ -26,10 +26,10 @@ metadata:
   name: CLUSTER_NAME
 networking:
   clusterNetwork:
-  - cidr: 10.128.0.0/14
+  - cidr: CLUSTER_CIDR
     hostPrefix: 23
   machineNetwork:
-  - cidr: 10.0.0.0/16
+  - cidr: VNET_CIDR
   networkType: OpenShiftSDN
   serviceNetwork:
   - 172.30.0.0/16
@@ -37,6 +37,10 @@ platform:
   azure:
     baseDomainResourceGroupName: RG_DOMAIN
     region: CLUSTER_LOCATION
+    networkResourceGroupName: NETWORK_RG
+    virtualNetwork: VNET_NAME
+    controlPlaneSubnet: CONTROL_PLANE_SUBNET
+    computeSubnet: COMPUTE_SUBNET
 pullSecret: 'PULL_SECRET'
 fips: ENABLE_FIPS
 publish: PORT_PUBLISH
