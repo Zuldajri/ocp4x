@@ -32,8 +32,8 @@ NETWORK_RG=${25}
 VNET_NAME=${26}
 CLUSTER_CIDR=${27}
 VNET_CIDR=${28}
-MASTER_SUBNET=${29}
-WORKER_SUBNET=${30}
+CONTROL_PLANE_SUBNET=${29}
+COMPUTE_SUBNET=${30}
 
 
 
@@ -70,6 +70,12 @@ sudo sed -i "s/COMPUTE_VM_SIZE/$COMPUTE_VM_SIZE/g" /var/lib/waagent/custom-scrip
 sudo sed -i "s/COMPUTE_OS_DISK/$COMPUTE_OS_DISK/g" /var/lib/waagent/custom-script/download/0/openshift/install-config.yaml
 sudo sed -i "s/ENABLE_FIPS/$ENABLE_FIPS/g" /var/lib/waagent/custom-script/download/0/openshift/install-config.yaml
 sudo sed -i "s/PORT_PUBLISH/$PORT_PUBLISH/g" /var/lib/waagent/custom-script/download/0/openshift/install-config.yaml
+sudo sed -i "s/NETWORK_RG/$NETWORK_RG/g" /var/lib/waagent/custom-script/download/0/openshift/install-config.yaml
+sudo sed -i "s/VNET_NAME/$VNET_NAME/g" /var/lib/waagent/custom-script/download/0/openshift/install-config.yaml
+sudo sed -i "s/CLUSTER_CIDR/$CLUSTER_CIDR/g" /var/lib/waagent/custom-script/download/0/openshift/install-config.yaml
+sudo sed -i "s/VNET_CIDR/$VNET_CIDR/g" /var/lib/waagent/custom-script/download/0/openshift/install-config.yaml
+sudo sed -i "s/CONTROL_PLANE_SUBNET/$CONTROL_PLANE_SUBNET/g" /var/lib/waagent/custom-script/download/0/openshift/install-config.yaml
+sudo sed -i "s/COMPUTE_SUBNET/$COMPUTE_SUBNET/g" /var/lib/waagent/custom-script/download/0/openshift/install-config.yaml
 
 echo sshKey: $SSH_PUBLIC >> /var/lib/waagent/custom-script/download/0/openshift/install-config.yaml
 
