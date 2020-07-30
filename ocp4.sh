@@ -70,10 +70,13 @@ sudo sed -i "s/ENABLE_FIPS/$ENABLE_FIPS/g" /var/lib/waagent/custom-script/downlo
 sudo sed -i "s/PORT_PUBLISH/$PORT_PUBLISH/g" /var/lib/waagent/custom-script/download/0/openshift/install-config.yaml
 sudo sed -i "s/NETWORK_RG/$NETWORK_RG/g" /var/lib/waagent/custom-script/download/0/openshift/install-config.yaml
 sudo sed -i "s/VNET_NAME/$VNET_NAME/g" /var/lib/waagent/custom-script/download/0/openshift/install-config.yaml
-sudo sed -i "s/CLUSTER_CIDR/$CLUSTER_CIDR/g" /var/lib/waagent/custom-script/download/0/openshift/install-config.yaml
-sudo sed -i "s/VNET_CIDR/$VNET_CIDR/g" /var/lib/waagent/custom-script/download/0/openshift/install-config.yaml
 sudo sed -i "s/CONTROL_PLANE_SUBNET/$CONTROL_PLANE_SUBNET/g" /var/lib/waagent/custom-script/download/0/openshift/install-config.yaml
 sudo sed -i "s/COMPUTE_SUBNET/$COMPUTE_SUBNET/g" /var/lib/waagent/custom-script/download/0/openshift/install-config.yaml
+
+sudo wget https://raw.githubusercontent.com/Zuldajri/ocp4/master/cluster_cidr.py -O /var/lib/waagent/custom-script/download/0/cluster_cidr.py
+sudo wget https://raw.githubusercontent.com/Zuldajri/ocp4/master/vnet_cidr.py -O /var/lib/waagent/custom-script/download/0/vnet_cidr.py
+sudo python /var/lib/waagent/custom-script/download/0/cluster_cidr.py /var/lib/waagent/custom-script/download/0/openshift/install-config.yaml
+sudo python /var/lib/waagent/custom-script/download/0/vnet_cidr.py /var/lib/waagent/custom-script/download/0/openshift/install-config.yaml
 
 echo sshKey: $SSH_PUBLIC >> /var/lib/waagent/custom-script/download/0/openshift/install-config.yaml
 
