@@ -9,29 +9,28 @@ OPENSHIFT_USER=$4
 OPENSHIFT_PASSWORD=$5
 AZURE_CLIENT_ID=$6
 AZURE_CLIENT_SECRET=$7
-KEYVAULT_NAME=$8
-KEYVAULT_RG=$9
-KEYVAULT_LOCATION=${10}
-DOMAIN_NAME=${11}
-RG_DOMAIN=${12}
-CLUSTER_NAME=${13}
-CLUSTER_VERSION=${14}
-CLUSTER_LOCATION=${15}
-PULL_SECRET=${16}
-CONTROL_PLANE_REPLICA=${17}
-COMPUTE_REPLICA=${18}
-CONTROL_PLANE_VM_SIZE=${19}
-COMPUTE_VM_SIZE=${20}
-CONTROL_PLANE_OS_DISK=${21}
-COMPUTE_OS_DISK=${22}
-ENABLE_FIPS=${23}
-PORT_PUBLISH=${24}
-NETWORK_RG=${25}
-VNET_NAME=${26}
-CLUSTER_CIDR=${27}
-VNET_CIDR=${28}
-CONTROL_PLANE_SUBNET=${29}
-COMPUTE_SUBNET=${30}
+KEYVAULT_RG=$8
+KEYVAULT_LOCATION=$9
+DOMAIN_NAME=${10}
+RG_DOMAIN=${11}
+CLUSTER_NAME=${12}
+CLUSTER_VERSION=${13}
+CLUSTER_LOCATION=${14}
+PULL_SECRET=${15}
+CONTROL_PLANE_REPLICA=${16}
+COMPUTE_REPLICA=${17}
+CONTROL_PLANE_VM_SIZE=${18}
+COMPUTE_VM_SIZE=${19}
+CONTROL_PLANE_OS_DISK=${20}
+COMPUTE_OS_DISK=${21}
+ENABLE_FIPS=${22}
+PORT_PUBLISH=${23}
+NETWORK_RG=${24}
+VNET_NAME=${25}
+CLUSTER_CIDR=${26}
+VNET_CIDR=${27}
+CONTROL_PLANE_SUBNET=${28}
+COMPUTE_SUBNET=${29}
 
 
 
@@ -83,6 +82,9 @@ echo sshKey: $SSH_PUBLIC >> /var/lib/waagent/custom-script/download/0/openshift/
 openshift-install create cluster --dir=openshift --log-level=info
 
 export KUBECONFIG=./openshift/auth/kubeconfig
+CLUSTER_ID=$(oc get machineset -n openshift-machine-api -o jsonpath='{.items[0].metadata.labels.machine\.openshift\.io/cluster-api-cluster}')
+KEYVAULT_NAME=$CLUSTER_ID
+
 
 sudo wget https://raw.githubusercontent.com/Zuldajri/ocp4/master/oauth.yaml
 sudo wget https://raw.githubusercontent.com/Zuldajri/ocp4/master/cr.yaml
