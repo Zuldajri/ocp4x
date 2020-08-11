@@ -76,7 +76,7 @@
 			"type": "string"
 		},
 		"enableFips": {
-			"type": "bool"
+			"type": "string"
 		},
 		"privateOrPublic": {
 			"type": "string"
