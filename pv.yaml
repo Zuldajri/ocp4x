@@ -9,6 +9,6 @@ spec:
     - "ReadWriteOnce"
   storageClassName: azure-file-sc
   azureFile:
-    secretName: SHARESECRET
+    secretName: file-share-secret
     shareName: SHARENAME 
     readOnly: false
