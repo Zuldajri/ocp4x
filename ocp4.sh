@@ -31,7 +31,7 @@ CLUSTER_CIDR=${26}
 VNET_CIDR=${27}
 CONTROL_PLANE_SUBNET=${28}
 COMPUTE_SUBNET=${29}
-ENABLE_FILESHARE=${30}
+ENABLE_FILE_SHARE=${30}
 STORAGE_ACCOUNT_NAME=${31}
 FILE_SHARE_NAME=${32}
 FILE_SHARE_QUOTA=${33}
@@ -118,5 +118,11 @@ az keyvault create -n $KEYVAULT_NAME -g $KEYVAULT_RG -l $KEYVAULT_LOCATION --ena
 az keyvault secret set --vault-name $KEYVAULT_NAME -n kubeadmin-password --file /var/lib/waagent/custom-script/download/0/openshift/auth/kubeadmin-password
 az keyvault secret set --vault-name $KEYVAULT_NAME -n kubeconfig --file /var/lib/waagent/custom-script/download/0/openshift/auth/kubeconfig
 
+if [[ $ENABLE_FILE_SHARE == "true" ]]; then
+  STORAGE_ACCOUNT_KEY=$(az storage account keys list -g $NETWORK_RG -n $STORAGE_ACCOUNT_NAME --query [0].value -o tsv)
+  az storage share create --account-name $STORAGE_ACCOUNT_NAME --name $FILE_SHARE_NAME --account-key $STORAGE_ACCOUNT_KEY --quota $FILE_SHARE_QUOTA
+fi
+
+sleep 60
 
 
