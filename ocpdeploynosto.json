@@ -95,16 +95,7 @@
 		},
 		"workerSubnetName": {
 			"type": "string"
-		},
-                "storageAccountName": {
-                        "type": "string"
-                },
-                "fileShareName": {
-                        "type": "string"
-                },
-                "fileShareQuota": {
-                        "type": "int"
-                }
+		}
 	},
 	"variables": {
 		"singlequote": "'",
