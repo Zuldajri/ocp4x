@@ -1,0 +1,140 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"location": {
+			"type": "string"
+		},
+		"bastionLocation":{
+			"type": "string"
+		},
+		"ocpScriptUrl": {
+			"type": "string"
+		},
+		"ocp4": {
+			"type": "string"
+		},
+		"adminUsername": {
+			"type": "string",
+			"minLength": 1
+		},
+		"openshiftUsername": {
+			"type": "securestring",
+			"minLength": 1
+		},
+		"openshiftPassword": {
+			"type": "securestring",
+			"minLength": 1
+		},
+		"aadClientId": {
+			"type": "string"
+		},
+		"aadClientSecret": {
+			"type": "securestring"
+		},
+		"keyVaultRg": {
+			"type": "string"
+		},
+		"keyVaultLocation": {
+			"type": "string"
+		},
+		"bastionHostname": {
+			"type": "string"
+		},
+		"domainName": {
+			"type": "string"
+		},
+		"domainRg": {
+			"type": "string"
+		},
+		"clusterName": {
+			"type": "string"
+		},
+		"clusterVersion": {
+			"type": "string"
+		},
+		"pullSecret": {
+			"type": "string",
+			"minLength": 1
+		},
+		"controlPlaneReplica": {
+			"type": "int"
+		},
+		"computeReplica": {
+			"type": "int"
+		},
+		"controlPlaneVmSize": {
+			"type": "string"
+		},
+		"computeVmSize": {
+			"type": "string"
+		},
+		"controlPlaneOsDisk": {
+			"type": "string"
+		},
+		"computeOsDisk": {
+			"type": "string"
+		},
+		"enableFips": {
+			"type": "string"
+		},
+		"privateOrPublic": {
+			"type": "string"
+		},
+		"virtualNetworkName": {
+			"type": "string"
+		},
+		"virtualNetworkCIDR": {
+			"type": "string"
+		},
+		"networkResourceGroup": {
+			"type": "string"
+		},
+		"masterSubnetName": {
+			"type": "string"
+		},
+		"workerSubnetName": {
+			"type": "string"
+		},
+                "storageAccountName": {
+                        "type": "string"
+                },
+                "fileShareName": {
+                        "type": "string"
+                },
+                "fileShareQuota": {
+                        "type": "int"
+                }
+	},
+	"variables": {
+		"singlequote": "'",
+		"tenantId": "[subscription().tenantId]",
+		"subscriptionId": "[subscription().subscriptionId]",
+		"cidr-prefix": "[split(parameters('virtualNetworkCIDR'), '.')[0]]",
+		"clusterNetworkCidr": "[concat(variables('cidr-prefix'), '.128.0.0/14')]"
+	},
+	"resources": [{
+		"type": "Microsoft.Compute/virtualMachines/extensions",
+		"name": "[concat(parameters('bastionHostname'), '/deployOpenshift')]",
+		"location": "[parameters('bastionLocation')]",
+		"apiVersion": "2019-07-01",
+		"tags": {
+			"displayName": "DeployOpenshift"
+		},
+		"properties": {
+			"publisher": "Microsoft.Azure.Extensions",
+			"type": "CustomScript",
+			"typeHandlerVersion": "2.0",
+			"autoUpgradeMinorVersion": true,
+			"settings": {
+				"fileUris": [
+					"[parameters('ocpScriptUrl')]"
+				]
+			},
+			"protectedSettings": {
+				"commandToExecute": "[concat('bash ', parameters('ocp4'), ' \"', variables('tenantId'), '\" ', '\"', variables('subscriptionId'), '\" ', '\"', parameters('adminUsername'), '\" ', '\"', parameters('openshiftUsername'), '\" ', '\"', parameters('openshiftPassword'), '\" ', '\"', parameters('aadClientId'), '\" ', '\"', parameters('aadClientSecret'), '\" ', '\"', parameters('keyVaultRg'), '\"', ' \"', parameters('keyVaultLocation'), '\"', ' \"', parameters('domainName'), '\"', ' \"', parameters('domainRg'), '\"', ' \"', parameters('clusterName'), '\"', ' \"', parameters('clusterVersion'), '\"', ' \"', parameters('location'), '\" ', variables('singlequote'), parameters('pullSecret'), variables('singlequote'), ' \"', parameters('controlPlaneReplica'), '\"', ' \"', parameters('computeReplica'), '\" ', '\"', parameters('controlPlaneVmSize'), '\"', ' \"', parameters('computeVmSize'), '\" ', '\"', parameters('controlPlaneOsDisk'), '\"', ' \"', parameters('computeOsDisk'), '\" ', '\"', parameters('enableFips'), '\"', ' \"', parameters('privateOrPublic'), '\"', ' \"', parameters('networkResourceGroup'), '\"', ' \"', parameters('virtualNetworkName'), '\"', ' \"', variables('clusterNetworkCidr'), '\"', ' \"', parameters('virtualNetworkCIDR'), '\"', ' \"', parameters('masterSubnetName'), '\"', ' \"', parameters('workerSubnetName'), '\"', ' \"', parameters('storageAccountName'), '\"', ' \"', parameters('fileShareName'), '\"', ' \"', parameters('fileShareQuota'), '\"')]"
+			}
+		}
+	}],
+	"outputs": {}
+}
