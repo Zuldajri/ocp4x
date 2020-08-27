@@ -96,9 +96,6 @@
 		"workerSubnetName": {
 			"type": "string"
 		},
-		"enableFileShare": {
-			"type": "string"
-		},
                 "storageAccountName": {
                         "type": "string"
                 },
