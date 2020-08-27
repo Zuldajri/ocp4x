@@ -118,20 +118,20 @@ az keyvault create -n $KEYVAULT_NAME -g $KEYVAULT_RG -l $KEYVAULT_LOCATION --ena
 az keyvault secret set --vault-name $KEYVAULT_NAME -n kubeadmin-password --file /var/lib/waagent/custom-script/download/0/openshift/auth/kubeadmin-password
 az keyvault secret set --vault-name $KEYVAULT_NAME -n kubeconfig --file /var/lib/waagent/custom-script/download/0/openshift/auth/kubeconfig
 
-if [[ $ENABLE_FILE_SHARE == "true" ]]; then
-  STORAGE_ACCOUNT_KEY=$(az storage account keys list -g $NETWORK_RG -n $STORAGE_ACCOUNT_NAME --query [0].value -o tsv)
-  az storage share create --account-name $STORAGE_ACCOUNT_NAME --name $FILE_SHARE_NAME --account-key $STORAGE_ACCOUNT_KEY --quota $FILE_SHARE_QUOTA
-  sleep 60
-  oc create secret generic file-share-secret --from-literal=azurestorageaccountname=$STORAGE_ACCOUNT_NAME --from-literal=azurestorageaccountkey=$STORAGE_ACCOUNT_KEY
-  sudo wget https://raw.githubusercontent.com/Zuldajri/ocp4/master/pv.yaml
-  sudo sed -i "s/QUOTA/$FILE_SHARE_QUOTA/g" /var/lib/waagent/custom-script/download/0/pv.yaml
-  sudo sed -i "s/SHARENAME/$FILE_SHARE_NAME/g" /var/lib/waagent/custom-script/download/0/pv.yaml
-  oc apply -f pv.yaml
-  sleep 60
-  sudo wget https://raw.githubusercontent.com/Zuldajri/ocp4/master/pvc.yaml
-  sudo sed -i "s/QUOTA/$FILE_SHARE_QUOTA/g" /var/lib/waagent/custom-script/download/0/pvc.yaml
-  oc apply -f pvc.yaml
-fi
+
+STORAGE_ACCOUNT_KEY=$(az storage account keys list -g $NETWORK_RG -n $STORAGE_ACCOUNT_NAME --query [0].value -o tsv)
+az storage share create --account-name $STORAGE_ACCOUNT_NAME --name $FILE_SHARE_NAME --account-key $STORAGE_ACCOUNT_KEY --quota $FILE_SHARE_QUOTA
+sleep 60
+oc create secret generic file-share-secret --from-literal=azurestorageaccountname=$STORAGE_ACCOUNT_NAME --from-literal=azurestorageaccountkey=$STORAGE_ACCOUNT_KEY
+sudo wget https://raw.githubusercontent.com/Zuldajri/ocp4/master/pv.yaml
+sudo sed -i "s/QUOTA/$FILE_SHARE_QUOTA/g" /var/lib/waagent/custom-script/download/0/pv.yaml
+sudo sed -i "s/SHARENAME/$FILE_SHARE_NAME/g" /var/lib/waagent/custom-script/download/0/pv.yaml
+oc apply -f pv.yaml
+sleep 60
+sudo wget https://raw.githubusercontent.com/Zuldajri/ocp4/master/pvc.yaml
+sudo sed -i "s/QUOTA/$FILE_SHARE_QUOTA/g" /var/lib/waagent/custom-script/download/0/pvc.yaml
+oc apply -f pvc.yaml
+
 
 
 
