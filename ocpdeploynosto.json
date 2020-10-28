@@ -75,6 +75,9 @@
 		"privateOrPublic": {
 			"type": "string"
 		},
+		"singleZoneOrMultiZone": {
+			"type": "string"
+		},
 		"virtualNetworkName": {
 			"type": "string"
 		},
