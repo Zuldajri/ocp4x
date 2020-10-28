@@ -47,7 +47,7 @@ sudo mv oc kubectl openshift-install /usr/local/bin
 
 
 sudo mkdir .azure
-sudo wget https://raw.githubusercontent.com/Zuldajri/ocp4/master/osServicePrincipal.json -O /var/lib/waagent/custom-script/download/0/.azure/osServicePrincipal.json
+sudo wget https://raw.githubusercontent.com/Zuldajri/ocp4x/master/osServicePrincipal.json -O /var/lib/waagent/custom-script/download/0/.azure/osServicePrincipal.json
 sudo sed -i "s/AZURE_SUBSCRIPTION_ID/$AZURE_SUBSCRIPTION_ID/g" /var/lib/waagent/custom-script/download/0/.azure/osServicePrincipal.json
 sudo sed -i "s/AZURE_CLIENT_ID/$AZURE_CLIENT_ID/g" /var/lib/waagent/custom-script/download/0/.azure/osServicePrincipal.json
 sudo sed -i "s/AZURE_CLIENT_SECRET/$AZURE_CLIENT_SECRET/g" /var/lib/waagent/custom-script/download/0/.azure/osServicePrincipal.json
@@ -62,7 +62,7 @@ zones="zones:
 fi
 
 sudo mkdir openshift
-sudo wget https://raw.githubusercontent.com/Zuldajri/ocp4/master/install-config.yaml -O /var/lib/waagent/custom-script/download/0/openshift/install-config.yaml
+sudo wget https://raw.githubusercontent.com/Zuldajri/ocp4x/master/install-config.yaml -O /var/lib/waagent/custom-script/download/0/openshift/install-config.yaml
 
 sudo sed -i "s/DOMAIN_NAME/$DOMAIN_NAME/g" /var/lib/waagent/custom-script/download/0/openshift/install-config.yaml
 sudo sed -i "s/CLUSTER_NAME/$CLUSTER_NAME/g" /var/lib/waagent/custom-script/download/0/openshift/install-config.yaml
@@ -83,8 +83,8 @@ sudo sed -i "s/VNET_NAME/$VNET_NAME/g" /var/lib/waagent/custom-script/download/0
 sudo sed -i "s/CONTROL_PLANE_SUBNET/$CONTROL_PLANE_SUBNET/g" /var/lib/waagent/custom-script/download/0/openshift/install-config.yaml
 sudo sed -i "s/COMPUTE_SUBNET/$COMPUTE_SUBNET/g" /var/lib/waagent/custom-script/download/0/openshift/install-config.yaml
 
-sudo wget https://raw.githubusercontent.com/Zuldajri/ocp4/master/cluster_cidr.py -O /var/lib/waagent/custom-script/download/0/cluster_cidr.py
-sudo wget https://raw.githubusercontent.com/Zuldajri/ocp4/master/vnet_cidr.py -O /var/lib/waagent/custom-script/download/0/vnet_cidr.py
+sudo wget https://raw.githubusercontent.com/Zuldajri/ocp4x/master/cluster_cidr.py -O /var/lib/waagent/custom-script/download/0/cluster_cidr.py
+sudo wget https://raw.githubusercontent.com/Zuldajri/ocp4x/master/vnet_cidr.py -O /var/lib/waagent/custom-script/download/0/vnet_cidr.py
 sudo python /var/lib/waagent/custom-script/download/0/cluster_cidr.py /var/lib/waagent/custom-script/download/0/openshift/install-config.yaml $CLUSTER_CIDR
 sudo python /var/lib/waagent/custom-script/download/0/vnet_cidr.py /var/lib/waagent/custom-script/download/0/openshift/install-config.yaml $VNET_CIDR
 
@@ -97,8 +97,8 @@ CLUSTER_ID=$(oc get machineset -n openshift-machine-api -o jsonpath='{.items[0].
 KEYVAULT_NAME=$CLUSTER_ID
 
 
-sudo wget https://raw.githubusercontent.com/Zuldajri/ocp4/master/oauth.yaml
-sudo wget https://raw.githubusercontent.com/Zuldajri/ocp4/master/cr.yaml
+sudo wget https://raw.githubusercontent.com/Zuldajri/ocp4x/master/oauth.yaml
+sudo wget https://raw.githubusercontent.com/Zuldajri/ocp4x/master/cr.yaml
 
 oc apply -f oauth.yaml
 
@@ -124,12 +124,12 @@ STORAGE_ACCOUNT_KEY=$(az storage account keys list -g $NETWORK_RG -n $STORAGE_AC
 az storage share create --account-name $STORAGE_ACCOUNT_NAME --name $FILE_SHARE_NAME --account-key $STORAGE_ACCOUNT_KEY --quota $FILE_SHARE_QUOTA
 sleep 60
 oc create secret generic file-share-secret --from-literal=azurestorageaccountname=$STORAGE_ACCOUNT_NAME --from-literal=azurestorageaccountkey=$STORAGE_ACCOUNT_KEY
-sudo wget https://raw.githubusercontent.com/Zuldajri/ocp4/master/pv.yaml
+sudo wget https://raw.githubusercontent.com/Zuldajri/ocp4x/master/pv.yaml
 sudo sed -i "s/QUOTA/$FILE_SHARE_QUOTA/g" /var/lib/waagent/custom-script/download/0/pv.yaml
 sudo sed -i "s/SHARENAME/$FILE_SHARE_NAME/g" /var/lib/waagent/custom-script/download/0/pv.yaml
 oc apply -f pv.yaml
 sleep 60
-sudo wget https://raw.githubusercontent.com/Zuldajri/ocp4/master/pvc.yaml
+sudo wget https://raw.githubusercontent.com/Zuldajri/ocp4x/master/pvc.yaml
 sudo sed -i "s/QUOTA/$FILE_SHARE_QUOTA/g" /var/lib/waagent/custom-script/download/0/pvc.yaml
 oc apply -f pvc.yaml
 
