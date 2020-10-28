@@ -17,10 +17,7 @@ compute:
       type: COMPUTE_VM_SIZE
       osDisk:
         diskSizeGB: COMPUTE_OS_DISK 
-      zones: 
-      - "1"
-      - "2"
-      - "3"
+      AV_ZONES
   replicas: COMPUTE_REPLICA
 metadata:
   name: CLUSTER_NAME
