@@ -9,28 +9,26 @@ OPENSHIFT_USER=$4
 OPENSHIFT_PASSWORD=$5
 AZURE_CLIENT_ID=$6
 AZURE_CLIENT_SECRET=$7
-KEYVAULT_RG=$8
-KEYVAULT_LOCATION=$9
-DOMAIN_NAME=${10}
-RG_DOMAIN=${11}
-CLUSTER_NAME=${12}
-CLUSTER_VERSION=${13}
-CLUSTER_LOCATION=${14}
-PULL_SECRET=${15}
-CONTROL_PLANE_REPLICA=${16}
-COMPUTE_REPLICA=${17}
-CONTROL_PLANE_VM_SIZE=${18}
-COMPUTE_VM_SIZE=${19}
-CONTROL_PLANE_OS_DISK=${20}
-COMPUTE_OS_DISK=${21}
-ENABLE_FIPS=${22}
-PORT_PUBLISH=${23}
-NETWORK_RG=${24}
-VNET_NAME=${25}
-CLUSTER_CIDR=${26}
-VNET_CIDR=${27}
-CONTROL_PLANE_SUBNET=${28}
-COMPUTE_SUBNET=${29}
+DOMAIN_NAME=$8
+RG_DOMAIN=$9
+CLUSTER_NAME=${10}
+CLUSTER_VERSION=${11}
+CLUSTER_LOCATION=${12}
+PULL_SECRET=${13}
+CONTROL_PLANE_REPLICA=${14}
+COMPUTE_REPLICA=${15}
+CONTROL_PLANE_VM_SIZE=${16}
+COMPUTE_VM_SIZE=${17}
+CONTROL_PLANE_OS_DISK=${18}
+COMPUTE_OS_DISK=${19}
+ENABLE_FIPS=${20}
+PORT_PUBLISH=${21}
+NETWORK_RG=${22}
+VNET_NAME=${23}
+CLUSTER_CIDR=${24}
+VNET_CIDR=${25}
+CONTROL_PLANE_SUBNET=${26}
+COMPUTE_SUBNET=${27}
 
 
 
@@ -99,22 +97,6 @@ oc create secret generic htpass-secret --from-file=htpasswd=ocppass -n openshift
 oc apply -f cr.yaml
 
 oc adm policy add-cluster-role-to-user cluster-admin $OPENSHIFT_USER
-
-sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc
-sudo sh -c 'echo -e "[azure-cli]
-name=Azure CLI
-baseurl=https://packages.microsoft.com/yumrepos/azure-cli
-enabled=1
-gpgcheck=1
-gpgkey=https://packages.microsoft.com/keys/microsoft.asc" > /etc/yum.repos.d/azure-cli.repo'
-sudo yum install azure-cli -y
-
-az login --service-principal -u $AZURE_CLIENT_ID -p $AZURE_CLIENT_SECRET --tenant $AZURE_TENANT_ID
-az group create -n $KEYVAULT_RG -l $KEYVAULT_LOCATION
-sleep 15
-az keyvault create -n $KEYVAULT_NAME -g $KEYVAULT_RG -l $KEYVAULT_LOCATION --enabled-for-template-deployment true
-az keyvault secret set --vault-name $KEYVAULT_NAME -n kubeadmin-password --file /var/lib/waagent/custom-script/download/0/openshift/auth/kubeadmin-password
-az keyvault secret set --vault-name $KEYVAULT_NAME -n kubeconfig --file /var/lib/waagent/custom-script/download/0/openshift/auth/kubeconfig
 
 
 
