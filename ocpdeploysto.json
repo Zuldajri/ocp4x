@@ -32,12 +32,6 @@
 		"aadClientSecret": {
 			"type": "securestring"
 		},
-		"keyVaultRg": {
-			"type": "string"
-		},
-		"keyVaultLocation": {
-			"type": "string"
-		},
 		"bastionHostname": {
 			"type": "string"
 		},
