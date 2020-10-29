@@ -75,7 +75,6 @@ sudo sed -i "s/CONTROL_PLANE_OS_DISK/$CONTROL_PLANE_OS_DISK/g" /var/lib/waagent/
 sudo sed -i "s/COMPUTE_REPLICA/$COMPUTE_REPLICA/g" /var/lib/waagent/custom-script/download/0/openshift/install-config.yaml
 sudo sed -i "s/COMPUTE_VM_SIZE/$COMPUTE_VM_SIZE/g" /var/lib/waagent/custom-script/download/0/openshift/install-config.yaml
 sudo sed -i "s/COMPUTE_OS_DISK/$COMPUTE_OS_DISK/g" /var/lib/waagent/custom-script/download/0/openshift/install-config.yaml
-sudo sed -i "s/AV_ZONES/$zones/g" /var/lib/waagent/custom-script/download/0/openshift/install-config.yaml
 sudo sed -i "s/ENABLE_FIPS/$ENABLE_FIPS/g" /var/lib/waagent/custom-script/download/0/openshift/install-config.yaml
 sudo sed -i "s/PORT_PUBLISH/$PORT_PUBLISH/g" /var/lib/waagent/custom-script/download/0/openshift/install-config.yaml
 sudo sed -i "s/NETWORK_RG/$NETWORK_RG/g" /var/lib/waagent/custom-script/download/0/openshift/install-config.yaml
@@ -85,8 +84,10 @@ sudo sed -i "s/COMPUTE_SUBNET/$COMPUTE_SUBNET/g" /var/lib/waagent/custom-script/
 
 sudo wget https://raw.githubusercontent.com/Zuldajri/ocp4x/master/cluster_cidr.py -O /var/lib/waagent/custom-script/download/0/cluster_cidr.py
 sudo wget https://raw.githubusercontent.com/Zuldajri/ocp4x/master/vnet_cidr.py -O /var/lib/waagent/custom-script/download/0/vnet_cidr.py
+sudo wget https://raw.githubusercontent.com/Zuldajri/ocp4x/master/av_zones.py -O /var/lib/waagent/custom-script/download/0/av_zones.py
 sudo python /var/lib/waagent/custom-script/download/0/cluster_cidr.py /var/lib/waagent/custom-script/download/0/openshift/install-config.yaml $CLUSTER_CIDR
 sudo python /var/lib/waagent/custom-script/download/0/vnet_cidr.py /var/lib/waagent/custom-script/download/0/openshift/install-config.yaml $VNET_CIDR
+sudo python /var/lib/waagent/custom-script/download/0/av_zones.py /var/lib/waagent/custom-script/download/0/openshift/install-config.yaml $zones
 
 echo sshKey: $SSH_PUBLIC >> /var/lib/waagent/custom-script/download/0/openshift/install-config.yaml
 
