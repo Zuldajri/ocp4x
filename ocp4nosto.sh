@@ -82,8 +82,10 @@ sudo sed -i "s/COMPUTE_SUBNET/$COMPUTE_SUBNET/g" /var/lib/waagent/custom-script/
 
 sudo wget https://raw.githubusercontent.com/Zuldajri/ocp4x/master/cluster_cidr.py -O /var/lib/waagent/custom-script/download/0/cluster_cidr.py
 sudo wget https://raw.githubusercontent.com/Zuldajri/ocp4x/master/vnet_cidr.py -O /var/lib/waagent/custom-script/download/0/vnet_cidr.py
+sudo wget https://raw.githubusercontent.com/Zuldajri/ocp4x/master/av_zones.py -O /var/lib/waagent/custom-script/download/0/av_zones.py
 sudo python /var/lib/waagent/custom-script/download/0/cluster_cidr.py /var/lib/waagent/custom-script/download/0/openshift/install-config.yaml $CLUSTER_CIDR
 sudo python /var/lib/waagent/custom-script/download/0/vnet_cidr.py /var/lib/waagent/custom-script/download/0/openshift/install-config.yaml $VNET_CIDR
+sudo python /var/lib/waagent/custom-script/download/0/av_zones.py /var/lib/waagent/custom-script/download/0/openshift/install-config.yaml $zones
 
 echo sshKey: $SSH_PUBLIC >> /var/lib/waagent/custom-script/download/0/openshift/install-config.yaml
 
