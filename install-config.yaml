@@ -5,9 +5,10 @@ controlPlane:
   name: master
   platform: 
     azure:
+      type: CONTROL_PLANE_VM_SIZE
       osDisk:
         diskSizeGB: CONTROL_PLANE_OS_DISK
-      type: CONTROL_PLANE_VM_SIZE
+      AV_ZONES
   replicas: CONTROL_PLANE_REPLICA
 compute:
 - hyperthreading: Enabled
