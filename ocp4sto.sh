@@ -62,40 +62,62 @@ zones="zones:
 fi
 
 sudo mkdir openshift
-sudo wget https://raw.githubusercontent.com/Zuldajri/ocp4x/master/install-config.yaml -O /var/lib/waagent/custom-script/download/0/openshift/install-config.yaml
 
-sudo sed -i "s/DOMAIN_NAME/$DOMAIN_NAME/g" /var/lib/waagent/custom-script/download/0/openshift/install-config.yaml
-sudo sed -i "s/CLUSTER_NAME/$CLUSTER_NAME/g" /var/lib/waagent/custom-script/download/0/openshift/install-config.yaml
-sudo sed -i "s/RG_DOMAIN/$RG_DOMAIN/g" /var/lib/waagent/custom-script/download/0/openshift/install-config.yaml
-sudo sed -i "s/CLUSTER_LOCATION/$CLUSTER_LOCATION/g" /var/lib/waagent/custom-script/download/0/openshift/install-config.yaml
-sudo sed -i "s/PULL_SECRET/$PULL_SECRET/g" /var/lib/waagent/custom-script/download/0/openshift/install-config.yaml
-sudo sed -i "s/CONTROL_PLANE_REPLICA/$CONTROL_PLANE_REPLICA/g" /var/lib/waagent/custom-script/download/0/openshift/install-config.yaml
-sudo sed -i "s/CONTROL_PLANE_VM_SIZE/$CONTROL_PLANE_VM_SIZE/g" /var/lib/waagent/custom-script/download/0/openshift/install-config.yaml
-sudo sed -i "s/CONTROL_PLANE_OS_DISK/$CONTROL_PLANE_OS_DISK/g" /var/lib/waagent/custom-script/download/0/openshift/install-config.yaml
-sudo sed -i "s/COMPUTE_REPLICA/$COMPUTE_REPLICA/g" /var/lib/waagent/custom-script/download/0/openshift/install-config.yaml
-sudo sed -i "s/COMPUTE_VM_SIZE/$COMPUTE_VM_SIZE/g" /var/lib/waagent/custom-script/download/0/openshift/install-config.yaml
-sudo sed -i "s/COMPUTE_OS_DISK/$COMPUTE_OS_DISK/g" /var/lib/waagent/custom-script/download/0/openshift/install-config.yaml
-sudo sed -i "s/ENABLE_FIPS/$ENABLE_FIPS/g" /var/lib/waagent/custom-script/download/0/openshift/install-config.yaml
-sudo sed -i "s/PORT_PUBLISH/$PORT_PUBLISH/g" /var/lib/waagent/custom-script/download/0/openshift/install-config.yaml
-sudo sed -i "s/NETWORK_RG/$NETWORK_RG/g" /var/lib/waagent/custom-script/download/0/openshift/install-config.yaml
-sudo sed -i "s/VNET_NAME/$VNET_NAME/g" /var/lib/waagent/custom-script/download/0/openshift/install-config.yaml
-sudo sed -i "s/CONTROL_PLANE_SUBNET/$CONTROL_PLANE_SUBNET/g" /var/lib/waagent/custom-script/download/0/openshift/install-config.yaml
-sudo sed -i "s/COMPUTE_SUBNET/$COMPUTE_SUBNET/g" /var/lib/waagent/custom-script/download/0/openshift/install-config.yaml
+cat > /var/lib/waagent/custom-script/download/0/openshift/install-config.yaml <<EOF
+apiVersion: v1
+baseDomain: $DOMAIN_NAME
+compute:
+- hyperthreading: Enabled
+  name: worker
+  platform: 
+    azure:
+      type: $COMPUTE_VM_SIZE
+      osDisk:
+        diskSizeGB: $COMPUTE_OS_DISK
+      $zones
+  replicas: $COMPUTE_REPLICA
+controlPlane:
+  hyperthreading: Enabled
+  name: master
+  platform: 
+    azure:
+      type: $CONTROL_PLANE_VM_SIZE
+      osDisk:
+        diskSizeGB: $CONTROL_PLANE_OS_DISK
+      $zones
+  replicas: $CONTROL_PLANE_REPLICA
+metadata:
+  name: $CLUSTER_NAME
+networking:
+  clusterNetwork:
+  - cidr: $CLUSTER_CIDR
+    hostPrefix: 23
+  machineNetwork: 
+  - cidr: $VNET_CIDR
+  networkType: OpenShiftSDN
+  serviceNetwork:
+  - 172.30.0.0/16
+platform:
+  azure:
+    baseDomainResourceGroupName: $RG_DOMAIN
+    region: $CLUSTER_LOCATION
+    networkResourceGroupName: $NETWORK_RG
+    virtualNetwork: $VNET_NAME
+    controlPlaneSubnet: $CONTROL_PLANE_SUBNET
+    computeSubnet: $COMPUTE_SUBNET
+pullSecret: '$PULL_SECRET'
+fips: $ENABLE_FIPS
+publish: $PORT_PUBLISH
+sshKey: |
+  $SSH_PUBLIC
+EOF
 
-sudo wget https://raw.githubusercontent.com/Zuldajri/ocp4x/master/cluster_cidr.py -O /var/lib/waagent/custom-script/download/0/cluster_cidr.py
-sudo wget https://raw.githubusercontent.com/Zuldajri/ocp4x/master/vnet_cidr.py -O /var/lib/waagent/custom-script/download/0/vnet_cidr.py
-sudo wget https://raw.githubusercontent.com/Zuldajri/ocp4x/master/av_zones.py -O /var/lib/waagent/custom-script/download/0/av_zones.py
-sudo python /var/lib/waagent/custom-script/download/0/cluster_cidr.py /var/lib/waagent/custom-script/download/0/openshift/install-config.yaml $CLUSTER_CIDR
-sudo python /var/lib/waagent/custom-script/download/0/vnet_cidr.py /var/lib/waagent/custom-script/download/0/openshift/install-config.yaml $VNET_CIDR
-sudo python /var/lib/waagent/custom-script/download/0/av_zones.py /var/lib/waagent/custom-script/download/0/openshift/install-config.yaml $zones
-
-echo sshKey: $SSH_PUBLIC >> /var/lib/waagent/custom-script/download/0/openshift/install-config.yaml
 
 openshift-install create cluster --dir=openshift --log-level=info
 
 export KUBECONFIG=./openshift/auth/kubeconfig
 CLUSTER_ID=$(oc get machineset -n openshift-machine-api -o jsonpath='{.items[0].metadata.labels.machine\.openshift\.io/cluster-api-cluster}')
-KEYVAULT_NAME=$CLUSTER_ID
+
 
 
 sudo wget https://raw.githubusercontent.com/Zuldajri/ocp4x/master/oauth.yaml
@@ -133,8 +155,3 @@ sleep 60
 sudo wget https://raw.githubusercontent.com/Zuldajri/ocp4x/master/pvc.yaml
 sudo sed -i "s/QUOTA/$FILE_SHARE_QUOTA/g" /var/lib/waagent/custom-script/download/0/pvc.yaml
 oc apply -f pvc.yaml
-
-
-
-
-
