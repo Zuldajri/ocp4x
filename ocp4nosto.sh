@@ -31,7 +31,8 @@ VNET_CIDR=${26}
 CONTROL_PLANE_SUBNET=${27}
 COMPUTE_SUBNET=${28}
 
-
+#SSL certificate issue fix: https://access.redhat.com/solutions/3167021
+yum update --disablerepo=* --enablerepo="*microsoft*"
 
 
 
