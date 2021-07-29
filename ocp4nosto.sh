@@ -32,7 +32,7 @@ CONTROL_PLANE_SUBNET=${27}
 COMPUTE_SUBNET=${28}
 
 #SSL certificate issue fix: https://access.redhat.com/solutions/3167021
-yum update --disablerepo=* --enablerepo="*microsoft*"
+sudo yum update -y --disablerepo='*' --enablerepo='*microsoft*'
 
 
 
