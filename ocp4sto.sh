@@ -34,7 +34,8 @@ STORAGE_ACCOUNT_NAME=${29}
 FILE_SHARE_NAME=${30}
 FILE_SHARE_QUOTA=${31}
 
-
+#SSL certificate issue fix: https://access.redhat.com/solutions/3167021
+yum update --disablerepo=* --enablerepo="*microsoft*"
 
 
 SSH_PUBLIC=$(cat /home/$ADMIN_USER/.ssh/authorized_keys)
