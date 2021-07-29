@@ -124,7 +124,7 @@ sudo wget https://raw.githubusercontent.com/Zuldajri/ocp4x/master/cr.yaml
 
 oc apply -f oauth.yaml
 
-yum install httpd-tools -y
+sudo yum install httpd-tools -y
 
 htpasswd -c -B -b ocppass $OPENSHIFT_USER $OPENSHIFT_PASSWORD
 oc create secret generic htpass-secret --from-file=htpasswd=ocppass -n openshift-config
